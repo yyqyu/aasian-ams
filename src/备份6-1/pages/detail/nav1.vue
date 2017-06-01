@@ -13,15 +13,15 @@
 				    		>
 				    			<label >
 				    				<span class="btn-check">
-				    			      <span>
-			                             <i class="fa" 
-			                                v-bind:class="[checkActive(item.id) ? 'fa-square-o' : 'fa-check-square-o']"
-			                                v-on:click="checklist(item.id)"	    
-			                             >
-			                             </i>
-			                             <!-- <input type="radio" name="c-radio" hidden> -->
-			                          </span>
-			                          {{item.name}} 
+				    					    <span>
+                             <i class="fa" 
+                                v-bind:class="[checkActive(index) ? 'fa-square-o' : 'fa-check-square-o']"
+                                v-on:click="checklist(index)"	    
+                            >
+                             </i>
+                             <input type="radio" name="c-radio" hidden>
+                          </span>
+                          {{item.name}} 
 				    				</span>
 				    			</label>
 				    		</td>
@@ -46,31 +46,31 @@ export default {
      			list: [
                   {
                   	name:'METAR/SPECI',
-                  	id:'00'
+                  	id:'metar'
                   },
                   {
                   	name:'SIGMET/AIRMET',
-                  	id:'01'
+                  	id:''
                   },
                   {
                   	name:'CR',
-                    id:'02'
+                    id:''
                   },
                   {
                   	name:'Sat',
-                  	id:'03'
+                  	id:''
                   },
                   {
                   	name:'Aircraft REP',
-                  	id:'04'
+                  	id:''
                   },
                   {
                   	name:'AMDAR',
-                  	id:'05'
+                  	id:''
                   },
                   {
                   	name:'Lightning',
-                  	id:'06'
+                  	id:''
                   }
      			]
      		},
@@ -79,23 +79,23 @@ export default {
      			list:[
                   {
                   	name:'Convective cloud',
-                  	id:'10'
+                  	id:'convective'
                   },
                   {
                   	name:'Turbulence',
-                  	id:'11'
+                  	id:''
                   },
                   {
                   	name:'Sand-dust storm',
-                  	id:'12'
+                  	id:''
                   },
                   {
                   	name:'Mountain wave',
-                  	id:'13'
+                  	id:''
                   },
                   {
                   	name:'lcing',
-                  	id:'14'
+                  	id:''
                   }
      			]
      		},
@@ -104,15 +104,15 @@ export default {
      			list:[
                   {
                   	name:'0-6h',
-                  	id:'20'
+                  	id:''
                   },
                   {
                   	name:'6-12h',
-                  	id:'21'
+                  	id:''
                   },
                   {
                   	name:'12-24h',
-                  	id:'22'
+                  	id:''
                   }
      			]
      		},
@@ -121,11 +121,11 @@ export default {
      			list:[
                   {
                   	name:'Routes',
-                  	id:'30'
+                  	id:''
                   },
                   {
                   	name:'FIRs',
-                  	id:'31'
+                  	id:''
                   }
      			]
      		}
@@ -137,6 +137,7 @@ export default {
         this.isPanelt = !this.isPanelt
     },
     checklist: function(index) {
+    	//alert(this.isPanelt)
     	if(this.nowIndexes.indexOf(index) === -1 ){
             this.nowIndexes.push(index)  
   		}
@@ -144,16 +145,7 @@ export default {
   			this.nowIndexes = _.remove(this.nowIndexes,(idx)=>{
                  return idx !== index
             })
-  		}	
-
-        // 用户点击多选框，会向后台传对应的id值
-  		if(this.nowIndexes.indexOf(index) != -1){
-  			this.$http.podt('http://localhost:3000/getPrice',index)
-  			.then((res)=>{
-        //传值成功，在这调用对应的回调函数
-
-  			})
-  		}	
+  		}		
     },
     checkActive (index) {
   		return this.nowIndexes.indexOf(index) == -1
