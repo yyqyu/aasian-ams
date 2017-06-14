@@ -10,18 +10,20 @@
          </router-link>  
          <ul>
              <router-link v-for="item in navs"
+                          :key="item.name"
                           :to="{path:item.path}"
                           tag="li"
+                          class="head-li"
                           active-class="active"
              >  
                   {{item.name}}
              </router-link>
          </ul>       
          <div class="head-right">
-            <router-link to="/" class="h-right-a">Coordination</router-link>
+            <router-link to="/" class="h-right-a">Co-work</router-link>
             <router-link to="/" class="h-right-a">download</router-link>
             <span class="h-right-span" v-if="username=== ''" @click="logClick">login</span>
-            <a class="h-right-a" v-if="username=== ''" href="http://www.w3school.com.cn" target="_blank">register</a>
+            <!-- <a class="h-right-a" v-if="username=== ''" href="http://www.w3school.com.cn" target="_blank">register</a> -->
           </div> 
     </div>
     <div class="app-content">
@@ -29,10 +31,9 @@
            <router-view></router-view>
         </keep-alive>
     </div>
-    <div class="app-foot">
-      
+    <div class="app-foot">      
     </div>
-
+   
     <my-dialog 
         v-bind:is-show="isShowLogDialog" 
         @on-close="closeDialog('isShowLogDialog')"
@@ -59,7 +60,7 @@ export default {
        username:'',
         navs:[        
           {
-            name:'OVERVIEW',
+            name:'AVIATION WEATHER OVERVIEW',
             path:'/overview',
             active:false
           },
@@ -74,10 +75,22 @@ export default {
             active:false
           },
           {
-            name:'ADVISORY',
+            name:'ASIAN HAZARDOUS WEATHER ADVISORY ADVISORY PRODUCTS',
             path:'/advisory',
             active:false
           },
+        ],
+        navs2:[ 
+         {       
+            "name":"OVERVIEW",
+            "path":"'/overview'",
+            "active":"false"
+          },
+          {
+            "name":"OBSERVATION",
+            "path":"'/observation'",
+            "active":"false"
+          }
         ]
     }
   },
@@ -150,29 +163,37 @@ ol, ul {
 blockquote, q {
   quotes: none;
 }
-
 a {
   color: inherit;
   text-decoration: none;
+}
+.app-foot{
+  height: 38px;
+  background-color: rgb(71,71,71);
+}
+.app-foot2{
+  height: 98px;
+  
 }
 .app-wrap-wrap{
   width: 100%;
 }
 .app-wrap{
 margin:0 auto;
- width: 1280px;
 }
 .app-head{
   width: 100%;
   height: 50px;
-  box-shadow: 0px 2px 2px black;
+  position: relative;
 }
 .head-left{
   position: absolute;
   width: 357px;
-  float: left;
+  left: 0;
   color: #fff;
   background: black;
+  height: 100%;
+  top: 0;
 }
 .headleft-span{
   display: block;
@@ -180,30 +201,35 @@ margin:0 auto;
   height: 31px;
   margin-left: 51px;
   opacity: 0.9;
+  font-size: 16px;
 }
 .app-head ul{ 
   margin-left: 357px;
-  float: left;
+  margin-right: 255px;
   color: #fff;
   background: black;
-  width: 550px;
-  padding-left: 30px;
+  min-width: 683px;
+  height: 100%;
 }
 .app-head li{
   height: 30px;
-  float:left;
+  font-size: 13px;
+  float: left;
   text-align: left;
-  padding: 10px 20px;
-  cursor: pointer;
-  line-height: 32px;
+  padding-top: 18px;
+  padding-left: 24px;
+  line-height: 11px;
   opacity: 0.65;
+  word-wrap: break-word;
+  max-width: 204px;
+  cursor: pointer;
 }
 .app-head li.active,
 .app-head li:hover {
   color: #fff;
   opacity: 1;
   background: url(./assets/icon1.png) no-repeat;
-  background-position-x:9px;
+  background-position-x:10px;
   background-position-y:20px;
 }
 .app-head li a{
@@ -213,7 +239,11 @@ margin:0 auto;
   background: black;
   height: 33px;
   color: white;
+  right: 0;
   padding-top: 17px;
+  width: 255px;
+  position: absolute;
+  top: 0;
 }
 .h-right-a{
     opacity: 0.65;
