@@ -224,7 +224,7 @@ export default {
 .main .gis-box .funBtn{
     width:38px;
     height:36px;
-    background:url("./gisBtn.svg") no-repeat center;
+    background:url("../assets/gisBtn.png") no-repeat center;
     position:absolute;
     right:20px;
     top:20px;

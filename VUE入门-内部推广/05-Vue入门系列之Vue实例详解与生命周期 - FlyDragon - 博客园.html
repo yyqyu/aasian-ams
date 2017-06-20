@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://www.cnblogs.com/fly_dragon/p/6220273.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script async="" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/analytics.js.下载"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/bundle-CodingLife.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/bundle-CodingLife-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/fly_dragon/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/fly_dragon/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/fly_dragon/wlwmanifest.xml">
+<script src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/jquery.js.下载" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'fly_dragon', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<style type="text/css" adt="123"></style><script>//console.log('a')
+</script><script>doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                /*youku_loader: {
+                 find: /^http:\/\/static\.youku\.com(\/v[\d\.]*)?\/v\/swf\/loaders?[^\.]*\.swf/,
+                 replace: "http://2016.adtchrome.com/loader.swf"
+                 },
+                 youku_player: {
+                 find: /^http:\/\/static\.youku\.com(\/v[\d\.]*)?\/v\/swf\/(q?player[^\.]*|\w{13})\.swf/,
+                 replace: "http://2016.adtchrome.com/player.swf"
+                 },*/
+                'pps_pps': {
+                    'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
+                    'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
+                },
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if (/http:\/\/v.youku.com\/v_show\/.*/.test(window.location.href)){
+                    var tag = document.getElementById("playerBox").getAttribute("player")
+                    if (tag == "adt"){
+                        console.log("adt adv")
+                        return;
+                    }
+                }
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+// 20140730
+(function cnbeta() {
+    if (document.URL.indexOf('cnbeta.com') >= 0) {
+        var elms = document.body.querySelectorAll("p>embed");
+        Array.prototype.forEach.call(elms, function(elm) {
+            elm.style.marginLeft = "0px";
+        });
+    }
+})();
+//baidu
+//display: inline !important; visibility: visible !important;
+//display:block !important;visibility:visible !important; display:block !important;visibility:visible !important
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',function(){
+            aa();  
+        })
+    };
+}
+// 20140922
+(function kill_360() {
+    if (document.URL.indexOf('so.com') >= 0) {
+        document.getElementById("e_idea_pp").style.display = none;
+    }
+})();
+//解决腾讯视频列表点击无效
+if(document.URL.indexOf("v.qq.com") >= 0){
+    if (document.getElementById("mod_videolist")){
+        var listBox = document.getElementById("mod_videolist")
+        var list = listBox.getElementsByClassName("list_item")
+        for (i = 0;i < list.length;i++){
+            list[i].addEventListener("click", function() {
+                var url = this.getElementsByTagName("a")[0]
+                url = url.getAttribute("href")
+                var host = window.location.href
+                url = host.replace(/cover\/.*/,url)
+                window.location.href = url
+            })
+        }
+    }
+}
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("v.youku.com") >= 0){
+    window.sessionStorage.setItem("P_l_h5", true);
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body><link href="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/jiathis_share.css" rel="stylesheet" type="text/css"><div class="jiathis_style" style="height: auto; position: fixed; z-index: 100000000; top: 150px; right: 0px; overflow: hidden; width: 26px;"><table cellpadding="0" cellspacing="0"><tbody style="background:transparent"><tr><td style="background:transparent"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/r.gif" style="cursor:pointer;" onmouseover="$CKE.over()" onclick="$CKE.center(this)"></td><td><div><div class="jiadiv_01"><div style="width:100%;background:#F2F2F2;border-bottom:1px solid #E5E5E5;line-height:200%;padding-left:5px;font-size:12px"><table width="100%"><tbody><tr class="jt_sharetitle"><td align="left" style="text-align:left;line-height:25px;font-size:14px;font-weight:bold;color:#000000;">分享到...</td><td align="right" style="text-align:right;"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/img_exit.gif" border="0" style="opacity:0.5;filter:alpha(opacity=50);margin:0 10px;cursor:pointer;" onclick="$CKE.shareClose();"></td></tr></tbody></table></div><div class="jiadiv_02" style="width:100%;" id="jiathis_sers"><a href="javascript:;" onclick="jiathis_sendto(&#39;weixin&#39;);return false;" class="jiatitle"><span class="jtico jtico_weixin">微信</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tsina&#39;);return false;" class="jiatitle"><span class="jtico jtico_tsina">微博</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;copy&#39;);return false;" class="jiatitle"><span class="jtico jtico_copy">复制网址</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;email&#39;);return false;" class="jiatitle"><span class="jtico jtico_email">邮件</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;cqq&#39;);return false;" class="jiatitle"><span class="jtico jtico_cqq">QQ好友</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;qzone&#39;);return false;" class="jiatitle"><span class="jtico jtico_qzone">QQ空间</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;renren&#39;);return false;" class="jiatitle"><span class="jtico jtico_renren">人人网</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;kaixin001&#39;);return false;" class="jiatitle"><span class="jtico jtico_kaixin001">开心网</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;evernote&#39;);return false;" class="jiatitle"><span class="jtico jtico_evernote">印象笔记</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;linkedin&#39;);return false;" class="jiatitle"><span class="jtico jtico_linkedin">领英</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;feixin&#39;);return false;" class="jiatitle"><span class="jtico jtico_feixin">飞信</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;douban&#39;);return false;" class="jiatitle"><span class="jtico jtico_douban">豆瓣</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;twitter&#39;);return false;" class="jiatitle"><span class="jtico jtico_twitter">Twitter</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;fb&#39;);return false;" class="jiatitle"><span class="jtico jtico_fb">Facebook</span></a><a href="javascript:;" onclick="jiathis_sendto(&#39;ishare&#39;);return false;" class="jiatitle"><span class="jtico jtico_ishare">一键分享</span></a><a href="javascript:;" onclick="$CKE.center(this);return false;" class="jiatitle"><span class="jtico jtico_jiathis">查看更多(96)</span></a><div style="clear:both"></div></div><div class="ckepopBottom" style="width:100%;"><div style="float:left;font-size:10px"><a href="http://www.jiathis.com/help/html/what-is-jiathis" class="link_01" style="color:#333333;display:none;" target="_blank">这是什么工具?</a></div><div style="float:right;font-size:11px;margin:0 5px 0 0;"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/img_012.gif" align="absmiddle" border="0"><a href="http://www.jiathis.com/index2" style="color:#333333;padding:0 3px;" class="link_01" target="_blank">JiaThis</a></div><div style="clear:both"></div></div></div></div></td></tr></tbody></table></div><iframe frameborder="0" style="position: absolute; display: none;" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/saved_resource.html"></iframe><div class="jiathis_style" style="height: auto; position: absolute; z-index: 100000000; display: none; top: 50%; left: 50%; overflow: auto;"><div style="border:10px solid #7F7F7F; width:300px;"><div class="jiadiv_01" style="width:300px;"><div style="background:#F2F2F2;line-height:100%;height:30px;overflow:hidden;width:300px;"><table width="100%" style="margin:5px 0 0 0;"><tbody><tr class="jt_sharetitle" style="line-height:20px!important;"><td align="left" style="text-align:left;font-size:12px;">分享到各大网站</td><td align="right"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/img_exit.gif" border="0" style="margin:0 4px;cursor:pointer;" onclick="$CKE.centerClose();"></td></tr></tbody></table></div><div class="searchTxtCont"><div style="background:url(http://v3.jiathis.com/code/images/img_so.gif) no-repeat center;height:30px; width:281px"><form onsubmit="return false;"><input class="searchTxt" name="" type="text" onclick="this.value=&#39;&#39;;this.style.color=&#39;#000&#39;;" value="输入网站名或拼音缩写" onkeyup="$CKE.choose(this);"></form></div></div><div id="jiathis_sharelist" class="jiadiv_02" style="width:300px;height:300px;overflow-y:auto;"><a href="javascript:;" onclick="jiathis_sendto(&#39;weixin&#39;);return false;" class="jiatitle"><span class="jtico jtico_weixin">微信</span><input type="hidden" value="weixin,微信,wx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tsina&#39;);return false;" class="jiatitle"><span class="jtico jtico_tsina">微博</span><input type="hidden" value="tsina,微博,xlwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;cqq&#39;);return false;" class="jiatitle"><span class="jtico jtico_cqq">QQ好友</span><input type="hidden" value="cqq,QQ好友,cqq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;qzone&#39;);return false;" class="jiatitle"><span class="jtico jtico_qzone">QQ空间</span><input type="hidden" value="qzone,QQ空间,qqkj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;copy&#39;);return false;" class="jiatitle"><span class="jtico jtico_copy">复制网址</span><input type="hidden" value="copy,复制网址,fzwz"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;fav&#39;);return false;" class="jiatitle"><span class="jtico jtico_fav">收藏夹</span><input type="hidden" value="fav,收藏夹,scj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;print&#39;);return false;" class="jiatitle"><span class="jtico jtico_print">打印</span><input type="hidden" value="print,打印,dy"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;email&#39;);return false;" class="jiatitle"><span class="jtico jtico_email">邮件</span><input type="hidden" value="email,邮件,yj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;renren&#39;);return false;" class="jiatitle"><span class="jtico jtico_renren">人人网</span><input type="hidden" value="renren,人人网,rrw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;kaixin001&#39;);return false;" class="jiatitle"><span class="jtico jtico_kaixin001">开心网</span><input type="hidden" value="kaixin001,开心网,kxw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;evernote&#39;);return false;" class="jiatitle"><span class="jtico jtico_evernote">印象笔记</span><input type="hidden" value="evernote,印象笔记,evernote"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;linkedin&#39;);return false;" class="jiatitle"><span class="jtico jtico_linkedin">领英</span><input type="hidden" value="linkedin,领英,linkedin"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;feixin&#39;);return false;" class="jiatitle"><span class="jtico jtico_feixin">飞信</span><input type="hidden" value="feixin,飞信,fx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;douban&#39;);return false;" class="jiatitle"><span class="jtico jtico_douban">豆瓣</span><input type="hidden" value="douban,豆瓣,db"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;twitter&#39;);return false;" class="jiatitle"><span class="jtico jtico_twitter">Twitter</span><input type="hidden" value="twitter,Twitter,twitter"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;fb&#39;);return false;" class="jiatitle"><span class="jtico jtico_fb">Facebook</span><input type="hidden" value="fb,Facebook,facebook"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;ishare&#39;);return false;" class="jiatitle"><span class="jtico jtico_ishare">一键分享</span><input type="hidden" value="ishare,一键分享,yjfx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;ujian&#39;);return false;" class="jiatitle"><span class="jtico jtico_ujian">猜你喜欢</span><input type="hidden" value="ujian,猜你喜欢,cnxh"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;yixin&#39;);return false;" class="jiatitle"><span class="jtico jtico_yixin">易信</span><input type="hidden" value="yixin,易信,yx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;huaban&#39;);return false;" class="jiatitle"><span class="jtico jtico_huaban">花瓣网</span><input type="hidden" value="huaban,花瓣网,hbw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tqq&#39;);return false;" class="jiatitle"><span class="jtico jtico_tqq">腾讯微博</span><input type="hidden" value="tqq,腾讯微博,txwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;googleplus&#39;);return false;" class="jiatitle"><span class="jtico jtico_googleplus">Google+</span><input type="hidden" value="googleplus,Google+,googlej"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;alibaba&#39;);return false;" class="jiatitle"><span class="jtico jtico_alibaba">阿里巴巴</span><input type="hidden" value="alibaba,阿里巴巴,albb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;xiaoyou&#39;);return false;" class="jiatitle"><span class="jtico jtico_xiaoyou">朋友网</span><input type="hidden" value="xiaoyou,朋友网,pyw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;sdonote&#39;);return false;" class="jiatitle"><span class="jtico jtico_sdonote">麦库记事</span><input type="hidden" value="sdonote,麦库记事,mkjs"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;baidu&#39;);return false;" class="jiatitle"><span class="jtico jtico_baidu">百度搜藏</span><input type="hidden" value="baidu,百度搜藏,bdsc"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;gmail&#39;);return false;" class="jiatitle"><span class="jtico jtico_gmail">Gmail邮箱</span><input type="hidden" value="gmail,Gmail邮箱,gmailyx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;ydnote&#39;);return false;" class="jiatitle"><span class="jtico jtico_ydnote">有道云笔记</span><input type="hidden" value="ydnote,有道云笔记,ydybj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tianya&#39;);return false;" class="jiatitle"><span class="jtico jtico_tianya">天涯社区</span><input type="hidden" value="tianya,天涯社区,tysq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tieba&#39;);return false;" class="jiatitle"><span class="jtico jtico_tieba">百度贴吧</span><input type="hidden" value="tieba,百度贴吧,bdtb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;qingbiji&#39;);return false;" class="jiatitle"><span class="jtico jtico_qingbiji">轻笔记</span><input type="hidden" value="qingbiji,轻笔记,qbj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tifeng&#39;);return false;" class="jiatitle"><span class="jtico jtico_tifeng">凤凰微博</span><input type="hidden" value="tifeng,凤凰微博,fhwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;fanfou&#39;);return false;" class="jiatitle"><span class="jtico jtico_fanfou">饭否</span><input type="hidden" value="fanfou,饭否,ff"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;mingdao&#39;);return false;" class="jiatitle"><span class="jtico jtico_mingdao">明道</span><input type="hidden" value="mingdao,明道,md"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;douban9dian&#39;);return false;" class="jiatitle"><span class="jtico jtico_douban9dian">豆瓣9点</span><input type="hidden" value="douban9dian,豆瓣9点,db9d"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;google&#39;);return false;" class="jiatitle"><span class="jtico jtico_google">谷歌</span><input type="hidden" value="google,谷歌,gg"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;buzz&#39;);return false;" class="jiatitle"><span class="jtico jtico_buzz">谷歌Buzz</span><input type="hidden" value="buzz,谷歌Buzz,ggbuzz"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;youdao&#39;);return false;" class="jiatitle"><span class="jtico jtico_youdao">有道书签</span><input type="hidden" value="youdao,有道书签,ydsq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;qq&#39;);return false;" class="jiatitle"><span class="jtico jtico_qq">QQ书签</span><input type="hidden" value="qq,QQ书签,qqsq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;msn&#39;);return false;" class="jiatitle"><span class="jtico jtico_msn">MSN</span><input type="hidden" value="msn,MSN,msn"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;pinterest&#39;);return false;" class="jiatitle"><span class="jtico jtico_pinterest">Pinterest</span><input type="hidden" value="pinterest,Pinterest,pinterest"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;duitang&#39;);return false;" class="jiatitle"><span class="jtico jtico_duitang">堆糖</span><input type="hidden" value="duitang,堆糖,dt"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tyaolan&#39;);return false;" class="jiatitle"><span class="jtico jtico_tyaolan">摇篮微博</span><input type="hidden" value="tyaolan,摇篮微博,ylwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;hi&#39;);return false;" class="jiatitle"><span class="jtico jtico_hi">百度空间</span><input type="hidden" value="hi,百度空间,bdkj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;hotmail&#39;);return false;" class="jiatitle"><span class="jtico jtico_hotmail">Hotmail邮箱</span><input type="hidden" value="hotmail,Hotmail邮箱,hotmailyx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;xqw&#39;);return false;" class="jiatitle"><span class="jtico jtico_xqw">雪球</span><input type="hidden" value="xqw,雪球,xqw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;hexun&#39;);return false;" class="jiatitle"><span class="jtico jtico_hexun">和讯</span><input type="hidden" value="hexun,和讯,hx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;139mail&#39;);return false;" class="jiatitle"><span class="jtico jtico_139mail">139邮箱</span><input type="hidden" value="139mail,139邮箱,139yx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;189mail&#39;);return false;" class="jiatitle"><span class="jtico jtico_189mail">189邮箱</span><input type="hidden" value="189mail,189邮箱,189yx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;189cn&#39;);return false;" class="jiatitle"><span class="jtico jtico_189cn">翼友圈</span><input type="hidden" value="189cn,翼友圈,yyq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tpeople&#39;);return false;" class="jiatitle"><span class="jtico jtico_tpeople">人民微博</span><input type="hidden" value="tpeople,人民微博,rmwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;txinhua&#39;);return false;" class="jiatitle"><span class="jtico jtico_txinhua">新华微博</span><input type="hidden" value="txinhua,新华微博,xhwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;translate&#39;);return false;" class="jiatitle"><span class="jtico jtico_translate">谷歌翻译</span><input type="hidden" value="translate,谷歌翻译,ggfy"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tuita&#39;);return false;" class="jiatitle"><span class="jtico jtico_tuita">推他</span><input type="hidden" value="tuita,推他,tt"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;mop&#39;);return false;" class="jiatitle"><span class="jtico jtico_mop">猫扑推客</span><input type="hidden" value="mop,猫扑推客,mptk"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;meilishuo&#39;);return false;" class="jiatitle"><span class="jtico jtico_meilishuo">美丽说</span><input type="hidden" value="meilishuo,美丽说,mls"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;mogujie&#39;);return false;" class="jiatitle"><span class="jtico jtico_mogujie">蘑菇街</span><input type="hidden" value="mogujie,蘑菇街,mgj"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;ganniu&#39;);return false;" class="jiatitle"><span class="jtico jtico_ganniu">赶牛网</span><input type="hidden" value="ganniu,赶牛网,gnw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;poco&#39;);return false;" class="jiatitle"><span class="jtico jtico_poco">Poco网</span><input type="hidden" value="poco,Poco网,pocow"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;leihou&#39;);return false;" class="jiatitle"><span class="jtico jtico_leihou">雷猴网</span><input type="hidden" value="leihou,雷猴网,lhw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;thexun&#39;);return false;" class="jiatitle"><span class="jtico jtico_thexun">和讯微博</span><input type="hidden" value="thexun,和讯微博,hxwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;dream163&#39;);return false;" class="jiatitle"><span class="jtico jtico_dream163">游戏江湖</span><input type="hidden" value="dream163,游戏江湖,yxjh"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;jcrb&#39;);return false;" class="jiatitle"><span class="jtico jtico_jcrb">法律微博</span><input type="hidden" value="jcrb,法律微博,flwb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;tumblr&#39;);return false;" class="jiatitle"><span class="jtico jtico_tumblr">Tumblr</span><input type="hidden" value="tumblr,Tumblr,tumblr"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;reddit&#39;);return false;" class="jiatitle"><span class="jtico jtico_reddit">Reddit</span><input type="hidden" value="reddit,Reddit,reddit"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;instapaper&#39;);return false;" class="jiatitle"><span class="jtico jtico_instapaper">Instapaper</span><input type="hidden" value="instapaper,Instapaper,instapaper"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;pocket&#39;);return false;" class="jiatitle"><span class="jtico jtico_pocket">Pocket</span><input type="hidden" value="pocket,Pocket,pocket"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;caimi&#39;);return false;" class="jiatitle"><span class="jtico jtico_caimi">财迷</span><input type="hidden" value="caimi,财迷,cm"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;iwo&#39;);return false;" class="jiatitle"><span class="jtico jtico_iwo">WO+分享</span><input type="hidden" value="iwo,WO+分享,iwo"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;waakee&#39;);return false;" class="jiatitle"><span class="jtico jtico_waakee">挖客网</span><input type="hidden" value="waakee,挖客网,wkw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;cyzone&#39;);return false;" class="jiatitle"><span class="jtico jtico_cyzone">创业邦</span><input type="hidden" value="cyzone,创业邦,cyb"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;99earth&#39;);return false;" class="jiatitle"><span class="jtico jtico_99earth">救救地球</span><input type="hidden" value="99earth,救救地球,jjdq"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;chouti&#39;);return false;" class="jiatitle"><span class="jtico jtico_chouti">抽屉网</span><input type="hidden" value="chouti,抽屉网,ctw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;dig24&#39;);return false;" class="jiatitle"><span class="jtico jtico_dig24">递客网</span><input type="hidden" value="dig24,递客网,dkw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;yijee&#39;);return false;" class="jiatitle"><span class="jtico jtico_yijee">易集网</span><input type="hidden" value="yijee,易集网,yjw"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;pdfonline&#39;);return false;" class="jiatitle"><span class="jtico jtico_pdfonline">Pdf在线转换</span><input type="hidden" value="pdfonline,Pdf在线转换,pdfzxzh"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;printfriendly&#39;);return false;" class="jiatitle"><span class="jtico jtico_printfriendly">友好打印</span><input type="hidden" value="printfriendly,友好打印,yhdy"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;w3c&#39;);return false;" class="jiatitle"><span class="jtico jtico_w3c">W3c验证</span><input type="hidden" value="w3c,W3c验证,w3cyz"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;bitly&#39;);return false;" class="jiatitle"><span class="jtico jtico_bitly">Bit.ly</span><input type="hidden" value="bitly,Bit.ly,bitly"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;digg&#39;);return false;" class="jiatitle"><span class="jtico jtico_digg">Digg</span><input type="hidden" value="digg,Digg,digg"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;mailru&#39;);return false;" class="jiatitle"><span class="jtico jtico_mailru">Mail.ru</span><input type="hidden" value="mailru,Mail.ru,mail.ru"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;diigo&#39;);return false;" class="jiatitle"><span class="jtico jtico_diigo">Diigo</span><input type="hidden" value="diigo,Diigo,diigo"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;friendfeed&#39;);return false;" class="jiatitle"><span class="jtico jtico_friendfeed">FriendFeed</span><input type="hidden" value="friendfeed,FriendFeed,friendfeed"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;myspace&#39;);return false;" class="jiatitle"><span class="jtico jtico_myspace">Myspace</span><input type="hidden" value="myspace,Myspace,myspace"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;mixx&#39;);return false;" class="jiatitle"><span class="jtico jtico_mixx">Mixx</span><input type="hidden" value="mixx,Mixx,mixx"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;netlog&#39;);return false;" class="jiatitle"><span class="jtico jtico_netlog">NetLog</span><input type="hidden" value="netlog,NetLog,netlog"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;netvibes&#39;);return false;" class="jiatitle"><span class="jtico jtico_netvibes">Netvibes</span><input type="hidden" value="netvibes,Netvibes,netvibes"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;phonefavs&#39;);return false;" class="jiatitle"><span class="jtico jtico_phonefavs">Phonefavs</span><input type="hidden" value="phonefavs,Phonefavs,phonefavs"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;pingfm&#39;);return false;" class="jiatitle"><span class="jtico jtico_pingfm">Ping.fm</span><input type="hidden" value="pingfm,Ping.fm,ping.fm"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;plaxo&#39;);return false;" class="jiatitle"><span class="jtico jtico_plaxo">Plaxo</span><input type="hidden" value="plaxo,Plaxo,plaxo"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;delicious&#39;);return false;" class="jiatitle"><span class="jtico jtico_delicious">Delicious</span><input type="hidden" value="delicious,Delicious,delicious"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;wong&#39;);return false;" class="jiatitle"><span class="jtico jtico_wong">Mister Wong</span><input type="hidden" value="wong,Mister Wong,misterwong"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;stumbleupon&#39;);return false;" class="jiatitle"><span class="jtico jtico_stumbleupon">Stumbleupon</span><input type="hidden" value="stumbleupon,Stumbleupon,stumbleupon"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;plurk&#39;);return false;" class="jiatitle"><span class="jtico jtico_plurk">Plurk</span><input type="hidden" value="plurk,Plurk,plurk"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;funp&#39;);return false;" class="jiatitle"><span class="jtico jtico_funp">Funp</span><input type="hidden" value="funp,Funp,funp"></a><a href="javascript:;" onclick="jiathis_sendto(&#39;myshare&#39;);return false;" class="jiatitle"><span class="jtico jtico_myshare">Myshare</span><input type="hidden" value="myshare,Myshare,myshare"></a><div style="clear:both"></div></div><div class="centerBottom"><div style="float:left;font-size:10px;"><a href="http://www.jiathis.com/help/html/what-is-jiathis" class="link_01" style="color:#333333;display:none;" target="_blank">这是什么工具?</a></div><div style="float:right;font-size:11px;margin:0 10px 0 0;"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/img_012.gif" align="absmiddle" border="none">&nbsp;<a href="http://www.jiathis.com/index2" style="color:#333333;" class="link_01" target="_blank">JiaThis</a></div><div style="clear:both"></div></div></div></div></div><iframe frameborder="0" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/jiathis_utility.html" style="display: none;"></iframe>
+<a name="top"></a>
+<div id="page_begin_html"><link rel="stylesheet" href="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/bootstrap.min.css">
+    
+    </div><script>load_page_begin_html();</script>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/fly_dragon/"><img id="blogLogo" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/fly_dragon/">生命在于分享</a></h1>
+<h2>生命在于分享，技术源于生命,学无止境，谦虚慎行，三人行必有我师.</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/fly_dragon/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li></li>
+<li>
+<!----></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 61&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 720</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/fly_dragon/p/6220273.html">05-Vue入门系列之Vue实例详解与生命周期</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><p>Vue的实例是Vue框架的入口，其实也就是前端的ViewModel，它包含了页面中的业务逻辑处理、数据模型等，当然它也有自己的一系列的生命周期的事件钩子，辅助我们进行对整个Vue实例生成、编译、挂着、销毁等过程进行js控制。</p>
+<h2 id="501">5.1. Vue实例初始化的选项配置对象详解</h2>
+<p>前面我们已经用了很多次&nbsp;<code>new Vue({...})</code>的代码，而且Vue初始化的选项都已经用了<code>data</code>、<code>methods</code>、<code>el</code>、<code>computedd</code>等,估计您看到这里时，应该已经都明白了他们的作用，我们就详细讲解一下他们的使用情况。更详细的请参考<a href="https://cn.vuejs.org/v2/api/#data">官网内容</a></p>
+<h3 id="250101">5.1.1. Vue实例的的data对象</h3>
+<ul>
+<li>介绍</li>
+</ul>
+<p>Vue的实例的数据对象data 我们已经用了很多了，数据绑定离不开data里面的数据。也是Vue的核心属性。 它是Vue绑定数据到HTML标签的数据源泉，另外Vue框架会自动监视data里面的数据变化，自动更新数据到HTML标签上去。本质原理是：Vue会自动将data里面的数据进行递归抓换成getter和setter，然后就可以自动更新HTML标签了，当然用getter和setter所以老的浏览器Vue支持的不够好。</p>
+<ul>
+<li>
+<p>data对象的类型：</p>
+<ul>
+<li>类型是Object或者Function。</li>
+<li>如果是组件对象中，data必须是Function类型。【后面学了组件后就明白了，暂时对组件先放放。】</li>
+</ul>
+</li>
+<li>
+<p>实例：</p>
+</li>
+</ul>
+<pre><code class="lang-js">// 创建普通的Vue实例
+var vm = new Vue({
+  data: data
+})
+
+// 组件定义【后面会详细讲的】
+// Vue.extend() 中 data 必须是函数
+var Component = Vue.extend({
+  data: function () {   //这里必须是函数！！！！
+    return { a: 1 }
+  }
+})
+</code></pre>
+<h3 id="250102">5.1.2. Vue实例的computed</h3>
+<ul>
+<li>介绍</li>
+</ul>
+<p>Vue的计算属性（computed)的属性会自动混入Vue的实例中。所有 getter 和 setter 的 this 上下文自动地绑定为 Vue 实例。这就很强大了，再计算属性中定义的函数里面可以直接使用指向了vue实例的this，异常方便的啊。</p>
+<ul>
+<li>类型</li>
+</ul>
+<p><code>{ 键：函数}</code>&nbsp;<code>{ [key: string]: Function | { get: Function, set: Function } }</code>&nbsp;当然，可以省略setter,如果省略了setter，那么值就可以是普通函数，但是必须有返回值。</p>
+<ul>
+<li>官方的实例
+<pre><code class="lang-html">var vm = new Vue({
+data: { a: 1 },
+computed: {
+  // 仅读取，值只须为函数
+  aDouble: function () {
+    return this.a * 2
+  },
+  // 读取和设置
+  aPlus: {
+    get: function () {
+      return this.a + 1
+    },
+    set: function (v) {
+      this.a = v - 1
+    }
+  }
+}
+})
+vm.aPlus   // -&gt; 2
+vm.aPlus = 3
+vm.a       // -&gt; 2
+vm.aDouble // -&gt; 4
+</code></pre>
+</li>
+</ul>
+<h3 id="250103">5.1.3. methods</h3>
+<ul>
+<li>
+<p>类型: { [key: string]: Function }</p>
+</li>
+<li>
+<p>详细:</p>
+</li>
+</ul>
+<p>methods 将被混入到 Vue 实例中。可以直接通过 VM 实例访问这些方法，或者在指令表达式中使用。方法中的 this 自动绑定为 Vue 实例。</p>
+<p>注意，不应该使用箭头函数来定义 method 函数 (例如 plus: () =&gt; this.a++)。理由是箭头函数绑定了父级作用域的上下文，所以 this 将不会按照期望指向 Vue 实例，this.a 将是 undefined。</p>
+<ul>
+<li>示例:</li>
+</ul>
+<pre><code class="lang-js">var vm = new Vue({
+  data: { a: 1 },
+  methods: {
+    plus: function () {
+      this.a++
+    }
+  }
+})
+vm.plus()
+vm.a // 2
+</code></pre>
+<h3 id="250104">5.1.4. watch</h3>
+<ul>
+<li>类型</li>
+</ul>
+<p><code>{ [key: string]: string | Function | Object }</code></p>
+<ul>
+<li>详细:</li>
+</ul>
+<p>一个对象，键是需要观察的表达式，值是对应回调函数。值也可以是方法名，或者包含选项的对象。Vue 实例将会在实例化时调用 $watch()，遍历 watch 对象的每一个属性。</p>
+<ul>
+<li>示例:</li>
+</ul>
+<pre><code class="lang-js">var vm = new Vue({
+  data: {
+    a: 1,
+    b: 2,
+    c: 3
+  },
+  watch: {
+    // 监控a变量变化的时候，自动执行此函数
+    a: function (val, oldVal) {
+      console.log('new: %s, old: %s', val, oldVal)
+    },
+    // 深度 watcher
+    c: {
+      handler: function (val, oldVal) { /* ... */ },
+      deep: true
+    }
+  }
+})
+vm.a = 2 // -&gt; new: 2, old: 1
+//注意，不应该使用箭头函数来定义 watcher 函数 (例如 searchQuery: newValue =&gt; this.updateAutocomplete(newValue))。理由是箭头函数绑定了父级作用域的上下文，所以 this 将不会按照期望指向 Vue 实例，this.updateAutocomplete 将是 undefined。
+</code></pre>
+<p>参考综合案例：</p>
+<pre><code class="lang-html">&lt;!DOCTYPE html&gt; 
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Vue入门之数据监控&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue/dist/vue.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;p&gt;{{ number }}&lt;/p&gt;
+    &lt;input type="button" name="btnGetNumber" value="增加" v-on:click="getNumber()"&gt;
+  &lt;/div&gt;
+  &lt;script&gt;
+    var app = new Vue({         
+      el: '#app',               
+      data: {                   
+        number: 1
+      },
+      methods: {
+        // 事件响应方法的逻辑代码
+        getNumber: function (e) {
+          this.number += 1;   // 不管是内联方法调用，还是绑定事件处理器两种方式执行事件响应方法的时候 this都是指向 app
+        }
+      },
+      watch: {
+        // 监控number的变化，并自动执行下面的函数
+        number: function (val, oldVal) {
+          console.log('val:' + val + ' - oldVal: ' + oldVal);
+        }
+      }
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="250105">5.1.5. 设置el的详解</h3>
+<ul>
+<li>类型</li>
+</ul>
+<p><code>string | HTMLElement</code></p>
+<p>限制： 只在由 new 创建的实例中遵守。</p>
+<ul>
+<li>详细：</li>
+</ul>
+<p>提供一个在页面上已存在的 DOM 元素作为 Vue 实例的挂载目标,也就是说Vue绑定数据到哪里去找。可以是<code>CSS 选择器</code>，也可以是一个&nbsp;<code>HTMLElement实例</code>。</p>
+<p>在实例挂载之后(生命周期的内容后面会详细讲的奥)， 元素可以用 vm.$el 访问。</p>
+<p>如果这个选项在实例化时有作用，实例将立即进入编译过程，否则，需要显式调用 vm.$mount() 手动开启编译。</p>
+<pre><code class="lang-js">// 几乎所有例子都用到这个，所以就不再赘述
+var app = new Vue({         
+  el: '#app',
+  ...
+});
+</code></pre>
+<h2 id="502">5.2. Vue实例的生命周期</h2>
+<p>Vue实例有一个完整的生命周期，也就是从开始创建、初始化数据、编译模板、挂载Dom、渲染→更新→渲染、卸载等一系列过程，我们称这是Vue的生命周期。通俗说就是Vue实例从创建到销毁的过程，就是生命周期。</p>
+<p>在Vue的整个生命周期中，它提供了一系列的事件，可以让我们注册js方法，可以让我们达到控制整个过程的目的地，哇赛，如果你搞过Asp.Net WebForm的话，你会发现整个就是WebForm的翻版嘛哈哈。值得注意的是，在这些事件响应方法中的this直接指向的是vue的实例。</p>
+<p>首先看看下面官网的一张生命周期的图，我做一下标注，看看整体的流程，后面我们上代码做一下效果。</p>
+<p><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/o_lifecycle-标注版本.png" alt="vue生命周期" width="700" height="1633"></p>
+<p>Vue提供的可以注册的钩子都在上图片的红色框标注。 他们是：</p>
+<ul>
+<li><code>beforeCreate</code></li>
+</ul>
+<p>在实例初始化之后，数据观测(data observer) 和 event/watcher 事件配置之前被调用。</p>
+<ul>
+<li><code>created</code></li>
+</ul>
+<p>实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。</p>
+<ul>
+<li><code>beforeMount</code></li>
+</ul>
+<p>在挂载开始之前被调用：相关的 render 函数首次被调用。</p>
+<ul>
+<li><code>mounted</code></li>
+</ul>
+<p>el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$el 也在文档内。</p>
+<ul>
+<li><code>beforeUpdate</code></li>
+</ul>
+<p>数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。</p>
+<ul>
+<li><code>updated</code></li>
+</ul>
+<p>由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。</p>
+<p>当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态，因为这可能会导致更新无限循环。</p>
+<p>该钩子在服务器端渲染期间不被调用。</p>
+<ul>
+<li><code>beforeDestroy</code></li>
+</ul>
+<p>实例销毁之前调用。在这一步，实例仍然完全可用。</p>
+<ul>
+<li><code>destroyed</code></li>
+</ul>
+<p>Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。</p>
+<p>接下来我们做一个例子，看一下Vue中所有的生命周期怎么用的。</p>
+<pre><code class="lang-html">&lt;!DOCTYPE html&gt; 
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Vue入门之生命周期&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue/dist/vue.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;p&gt;{{ number }}&lt;/p&gt;
+    &lt;input type="text" name="btnSetNumber" v-model="number"&gt;
+  &lt;/div&gt;
+  &lt;script&gt;
+    var app = new Vue({         
+      el: '#app',               
+      data: {                   
+        number: 1
+      },
+      beforeCreate: function () {
+        console.log('beforeCreate 钩子执行...');
+        console.log(this.number)
+      },
+      cteated: function () {
+        console.log('cteated 钩子执行...');
+        console.log(this.number)
+      },
+      beforeMount: function () {
+        console.log('beforeMount 钩子执行...');
+        console.log(this.number)
+      },
+      mounted: function () {
+        console.log('mounted 钩子执行...');
+        console.log(this.number)
+      },
+      beforeUpdate: function () {
+        console.log('beforeUpdate 钩子执行...');
+        console.log(this.number)
+      },
+      updated: function () {
+        console.log('updated 钩子执行...');
+        console.log(this.number)
+      },
+      beforeDestroy: function () {
+        console.log('beforeDestroy 钩子执行...');
+        console.log(this.number)
+      },
+      destroyed: function () {
+        console.log('destroyed 钩子执行...');
+        console.log(this.number)
+      },
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>再看一个综合的实战的例子，可能涉及到ajax和组件，不过先看一下vue的生命周期的例子的用法：</p>
+<pre><code class="lang-js">import Axios from 'axios'       // 这是一个轻量级的ajax库，import是es6模块导入的语法。
+export default {                // 这是一个vue的模块，后面讲奥。
+  name: 'app',
+  components: {
+  },
+  data: function () {
+    return {
+      list: []
+    }
+  },
+  mounted: function () {          // 挂在完成后的生命周期钩子注册。
+    this.$nextTick(function () {  // 等待下一次更新完成后执行业务处理代码。
+      Axios.get('/api/menulist', {// 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新
+        params: {
+        }
+      }).then(function (res) {
+        this.list = res.data
+      }.bind(this))
+    })
+  }
+}
+</code></pre>
+<h2 id="503">5.3. Vue实例的全局配置</h2>
+<p>这一块都是一些小的知识点，我就不赘述了，直接copy&nbsp;<a href="https://cn.vuejs.org/v2/api/#silent">官网</a>&nbsp;Vue.config 是一个对象，包含 Vue 的全局配置。可以在启动应用之前修改下列属性：</p>
+<ul>
+<li>
+<p>silent</p>
+<ul>
+<li>
+<p>类型： boolean</p>
+</li>
+<li>
+<p>默认值： false</p>
+</li>
+<li>
+<p>用法：</p>
+<pre><code class="lang-js">Vue.config.silent = true
+//取消 Vue 所有的日志与警告。
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>optionMergeStrategies</p>
+<ul>
+<li>
+<p>类型： { [key: string]: Function }</p>
+</li>
+<li>
+<p>默认值： {}</p>
+</li>
+<li>
+<p>用法：</p>
+<pre><code class="lang-js">Vue.config.optionMergeStrategies._my_option = function (parent, child, vm) {
+return child + 1
+}
+const Profile = Vue.extend({
+_my_option: 1
+})
+// Profile.options._my_option = 2
+//自定义合并策略的选项。
+//合并策略选项分别接受第一个参数作为父实例，第二个参数为子实例，Vue实例上下文被作为第三个参数传入。
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>devtools</p>
+<ul>
+<li>
+<p>类型： boolean</p>
+</li>
+<li>
+<p>默认值： true (生产版为 false)</p>
+</li>
+<li>
+<p>用法：</p>
+<pre><code class="lang-js">// 务必在加载 Vue 之后，立即同步设置以下内容
+Vue.config.devtools = true
+//配置是否允许 vue-devtools 检查代码。开发版本默认为 true，生产版本默认为 false。生产版本设为 true 可以启用检查。
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>errorHandler</p>
+<ul>
+<li>
+<p>类型： Function</p>
+</li>
+<li>
+<p>默认值： 默认抛出错误</p>
+</li>
+<li>
+<p>用法：</p>
+<pre><code class="lang-js">Vue.config.errorHandler = function (err, vm) {
+// handle error
+}
+//指定组件的渲染和观察期间未捕获错误的处理函数。这个处理函数被调用时，可获取错误信息和 Vue 实例。
+//Sentry, an error tracking service, provides official integration using this option.
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>ignoredElements</p>
+<ul>
+<li>
+<p>类型: Array</p>
+</li>
+<li>
+<p>默认值: []</p>
+</li>
+<li>
+<p>用法:</p>
+<pre><code class="lang-js">Vue.config.ignoredElements = [
+'my-custom-web-component', 'another-web-component'
+]
+须使 Vue 忽略在 Vue 之外的自定义元素 (e.g., 使用了 Web Components APIs)。否则，它会假设你忘记注册全局组件或者拼错了组件名称，从而抛出一个关于 Unknown custom element 的警告。
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>keyCodes</p>
+<ul>
+<li>
+<p>类型： { [key: string]: number | Array&nbsp;}</p>
+</li>
+<li>
+<p>默认值： {}</p>
+</li>
+<li>
+<p>用法：</p>
+<pre><code class="lang-js">Vue.config.keyCodes = {
+v: 86,
+f1: 112,
+mediaPlayPause: 179,
+up: [38, 87]
+}api
+//给 v-on 自定义键位别名。
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="504">5.4. Vue的全局API</h2>
+<p>Vue的全局API提供大量的功能，我这里就给大家罗列几个常用的结果，其他的还是参考<a href="https://cn.vuejs.org/v2/api/#全局-API">官网</a>.</p>
+<h3 id="250401">5.4.1. Vue.nextTick</h3>
+<p><code>语法： Vue.nextTick( [callback, context] )</code></p>
+<pre><code>参数：    
+{Function} [callback]
+{Object} [context]
+</code></pre>
+<p>用法： 在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。</p>
+<pre><code class="lang-js">// 修改数据
+vm.msg = 'Hello'
+// DOM 还没有更新
+Vue.nextTick(function () {
+  // DOM 更新了
+})
+</code></pre>
+<h3 id="250402">5.4.2. Vue.set</h3>
+<p><code>语法： Vue.set( object, key, value )</code></p>
+<pre><code>参数：
+{Object} object
+{string} key
+{any} value
+返回值： 设置的值.
+</code></pre>
+<p>用法：<br>设置对象的属性。如果对象是响应式的，确保属性被创建后也是响应式的，同时触发视图更新。这个方法主要用于避开 Vue 不能检测属性被添加的限制。 注意对象不能是 Vue 实例，或者 Vue 实例的根数据对象。</p>
+<h3 id="250403">5.4.3. Vue.compile</h3>
+<ul>
+<li>语法：</li>
+
+
+</ul>
+<p><code>Vue.compile( template )</code></p>
+<ul>
+<li>参数：</li>
+
+
+</ul>
+<p><code>{string} template</code></p>
+<ul>
+<li>用法：</li>
+
+
+</ul>
+<pre><code class="lang-js">//在render函数中编译模板字符串。只在独立构建时有效
+var res = Vue.compile('&lt;div&gt;&lt;span&gt;{{ msg }}&lt;/span&gt;&lt;/div&gt;')
+new Vue({
+  data: {
+    msg: 'hello'
+  },
+  render: res.render,
+  staticRenderFns: res.staticRenderFns
+})
+</code></pre>
+<h3 id="250404">5.4.4. 全局API总结</h3>
+<p>其实还有几个其他的全局API，不打算在这里讲了，比如扩展组件Vue.extend 的用法、Vue.use加载插件、Vue.filter加载过滤器、Vue.directive自定义指令等 后面再讲其他Vue的知识点的时候，再加上这些，全局API其实就是Vue类型的静态方法，全局范围内都可以使用的，某些实例的方法本质也是调用了这些全局的，后面用到时候再说。</p>
+<h2 id="505">5.5. Vue实例与生命周期总结</h2>
+<p>Vue的实例封装的还是挺有艺术性的，很符合开发者的思维规范，它的生命周期也非常清晰，使用起来也非常方便。Vue确实一个好框架。</p>
+<p><span style="font-size: 18px;">其他章节详情请参考：<a title="vue入门" href="http://aicoder.com/vue/preview/all.html" target="_blank">http://aicoder.com/vue/preview/all.html</a></span></p>
+<p><span style="font-size: 18px;">Github地址：<a href="https://github.com/malun666/vue-stepbystep" target="_blank">源码下载</a></span></p>
+<p><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/154994-20161224215601589-1172320681.png" alt="" width="600" height="352"></p></div><div id="MySignature" style="display: block;"><div class="panel panel-primary">
+   <div class="panel-heading">
+<h4>作者：<a style="color: #fff" href="http://www.cnblogs.com/fly_dragon/">FlyDragon</a></h4>
+<h4>出处：<a style="color: #fff" id="PrintPreview" href="http://www.cnblogs.com/fly_dragon/" name="cbButton">http://www.cnblogs.com/fly_dragon/</a></h4>
+<h4>关于作者：专注于微软平台项目架构、管理和企业解决方案。如有问题或建议，请多多赐教！</h4>
+<h4>本文版权归作者和博客园共有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，如有问题，可以通malun666@126.com  联系我，非常感谢。
+</h4>
+</div>
+</div></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/fly_dragon/tag/vue/">vue</a>, <a href="http://www.cnblogs.com/fly_dragon/tag/vue.js/">vue.js</a>, <a href="http://www.cnblogs.com/fly_dragon/tag/mvvm/">mvvm</a>, <a href="http://www.cnblogs.com/fly_dragon/tag/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/">前端框架</a>, <a href="http://www.cnblogs.com/fly_dragon/tag/%E5%89%8D%E7%AB%AF/">前端</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6220273,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;09cbfa7b-28b0-df11-8eb9-001cf0cd104b&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fly_dragon/" target="_blank"><img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/20161220111528.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fly_dragon/">FlyDragon</a><br>
+            <a href="http://home.cnblogs.com/u/fly_dragon/followees">关注 - 91</a><br>
+            <a href="http://home.cnblogs.com/u/fly_dragon/followers">粉丝 - 1330</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor">荣誉：<a href="http://www.cnblogs.com/expert/" target="_blank">推荐博客</a></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;09cbfa7b-28b0-df11-8eb9-001cf0cd104b&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6220273,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">3</span>
+    </div>
+    <div class="buryit" onclick="votePost(6220273,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/fly_dragon/p/6218705.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/fly_dragon/p/6218705.html" title="发布于2016-12-24 22:59">04-Vue入门系列之Vue事件处理</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-12-25 19:37</span> <a href="http://www.cnblogs.com/fly_dragon/">FlyDragon</a> 阅读(<span id="post_view_count">13613</span>) 评论(<span id="post_comment_count">5</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6220273" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#" onclick="AddToWz(6220273);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=74981,cb_entryId=6220273,cb_blogApp=currentBlogApp,cb_blogUserGuid='09cbfa7b-28b0-df11-8eb9-001cf0cd104b',cb_entryCreatedDate='2016/12/25 19:37:00';loadViewCount(cb_entryId);</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3589436" class="layer">#1楼</a><a name="3589436" id="comment_anchor_3589436"></a>  <span class="comment_date">2016-12-26 10:46</span> <a id="a_comment_author_3589436" href="http://www.cnblogs.com/codedreams/" target="_blank">@_追寻_@</a> <a href="http://msg.cnblogs.com/send/%40_%E8%BF%BD%E5%AF%BB_%40" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3589436" class="blog_comment_body">马老师转前端了，net 已经没落了。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3589436,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3589436,&#39;Bury&#39;,this)">反对(2)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3592966" class="layer">#2楼</a><a name="3592966" id="comment_anchor_3592966"></a>  <span class="comment_date">2016-12-30 11:53</span> <a id="a_comment_author_3592966" href="http://home.cnblogs.com/u/409372/" target="_blank">shiter</a> <a href="http://msg.cnblogs.com/send/shiter" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3592966" class="blog_comment_body">马老师现在还在黑马和传智播客任教呢吗<br>我是12年2月.net 就业班你的学生<br>转android快两年了 公司要我做个网站 .net mvc都忘得差不多了<br>再次打开你的教学视频 也找到了你的博客<br>我知道现在传值黑马没.net班了 很好奇你在研究什么技术<br>博客上看到最近的vue专题 在向前就是两年前的.net博文了 <br>现在你在研究什么技术呢</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3592966,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3592966,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3592975" class="layer">#3楼</a><a name="3592975" id="comment_anchor_3592975"></a>  <span class="comment_date">2016-12-30 12:00</span> <a id="a_comment_author_3592975" href="http://home.cnblogs.com/u/409372/" target="_blank">shiter</a> <a href="http://msg.cnblogs.com/send/shiter" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3592975" class="blog_comment_body">马老师胖了好多<br>转前端么 <br>html5 还有vue <br>学的好快 还有unity会这么多门技术</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3592975,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3592975,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3597195" class="layer">#4楼</a><a name="3597195" id="comment_anchor_3597195"></a>  <span class="comment_date">2017-01-05 17:46</span> <a id="a_comment_author_3597195" href="http://home.cnblogs.com/u/919994/" target="_blank">FD小萌</a> <a href="http://msg.cnblogs.com/send/FD%E5%B0%8F%E8%90%8C" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3597195" class="blog_comment_body">6666</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3597195,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3597195,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3601093" class="layer">#5楼</a><a name="3601093" id="comment_anchor_3601093"></a>[<span class="louzhu">楼主</span>]<span id="comment-maxId" style="display:none;">3601093</span><span id="comment-maxDate" style="display:none;">2017/1/11 1:01:15</span>  <span class="comment_date">2017-01-11 01:01</span> <a id="a_comment_author_3601093" href="http://www.cnblogs.com/fly_dragon/" target="_blank">FlyDragon</a> <a href="http://msg.cnblogs.com/send/FlyDragon" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3601093" class="blog_comment_body"><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3592966" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3592966);">@</a>
+shiter<br>技术只是解决问题的工具而已。<br>现在研究的最多的是教学方法。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3601093,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3601093,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3601093_avatar" style="display:none;">http://pic.cnblogs.com/face/154994/20161220111528.png</span>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/571790/" target="_blank">iPhone降临十周年，这有你一定不知的十个秘史</a><br> ·  <a href="http://news.cnblogs.com/n/571785/" target="_blank">大批女装商家疑再遭天猫“2选1”胁迫 大幅调升京东售价</a><br> ·  <a href="http://news.cnblogs.com/n/571787/" target="_blank">繁华过后是落寞：Snap股价跌回发行价</a><br> ·  <a href="http://news.cnblogs.com/n/571789/" target="_blank">谷歌开源移动端计算机视觉模型：MobileNets</a><br> ·  <a href="http://news.cnblogs.com/n/571788/" target="_blank">科学家正研究用VR设备来减轻看牙医的痛苦</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/570194/" target="_blank">小printf的故事：什么是真正的程序员？</a><br> ·  <a href="http://kb.cnblogs.com/page/569992/" target="_blank">程序员的工作、学习与绩效</a><br> ·  <a href="http://kb.cnblogs.com/page/569056/" target="_blank">软件开发为什么很难</a><br> ·  <a href="http://kb.cnblogs.com/page/565901/" target="_blank">唱吧DevOps的落地，微服务CI/CD的范本技术解读</a><br> ·  <a href="http://kb.cnblogs.com/page/566523/" target="_blank">程序员，如何从平庸走向理想？</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><hr>
+<h3><a href="http://www.jianshu.com/u/cb593334c8bc">老马简书blog。后续更新都在简书...</a></h3>
+<hr>
+<div class="well">
+<h3>老马自嘲</h3>
+<hr>
+<img alt="帅气的Flydragon" class="img-circle" width="150" title="帅气的我！" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/o_前端与移动开发学院-院长-马伦.jpg"><br>
+</div>
+<div class="well">
+<h3>联系老马</h3>
+<hr>
+<a href="http://aicoder.com/">老马独立博客首页</a><br>
+<a href="https://github.com/malun666/">github</a>
+<p><span class="label label-primary">微信号：FlyDragon_malun</span></p>
+
+<p>扫码加老马微信</p>
+<div>
+<img style="width:100px;height:100px;" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/t_1482203014.png" alt="微信号：FlyDragon_malun">
+</div>
+</div>
+<div class="well">
+<h2>自我潮评</h2>
+<p>
+</p><p>
+<span class="label label-default">爱代码</span><span class="label label-primary">爱分享</span><span class="label label-success">爱孩子</span><span class="label label-info">爱历史</span>
+</p>
+<p>
+<span class="label label-warning">爱写博</span><span class="label label-danger">爱炫耀</span><span class="label label-success">爱Money....</span></p>
+<p></p>
+</div>
+<div class="well">
+<h2>老马联系方式</h2>
+<p><span class="label label-success">qq：515154084</span></p>
+<p><span class="label label-success">邮箱:malun666@126.com</span></p>
+
+
+<p><span class="label label-warning"><a href="http://weibo.com/flydragon2010">[新浪微博]</a></span></p>
+
+<p><span class="label label-primary"><strong>关注老马的公众号：houodeit  </strong></span></p>
+<img src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/t_getqrcode.jpg" alt="公众号"><br>
+<strong>扫加,每天看老马技术分享</strong>
+
+
+
+<!--
+<div style="display: none" id="__document_write_ajax_div-1"></div><script language="javascript" type="text/javascript" >window['__document_write_ajax_callbacks__']['1']();</script>
+<noscript><a href="http://www.51.la/?4442354" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/4442354.asp" style="border:none" /></a></noscript>
+-->
+<!--
+<p>您是第 <div style="display: none" id="__document_write_ajax_div-2"></div><script language="javascript" type="text/javascript" >window['__document_write_ajax_callbacks__']['2']();</script> 位访问者<p>-->
+<hr><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/fly_dragon/">FlyDragon</a><br>园龄：<a href="http://home.cnblogs.com/u/fly_dragon/" title="入园时间：2010-08-25">6年9个月</a><br>荣誉：<a href="http://www.cnblogs.com/expert/">推荐博客</a><br>粉丝：<a href="http://home.cnblogs.com/u/fly_dragon/followers/">1330</a><br>关注：<a href="http://home.cnblogs.com/u/fly_dragon/followees/">91</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;09cbfa7b-28b0-df11-8eb9-001cf0cd104b&#39;)">+加关注</a></div><script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script><script>window['__document_write_ajax_callbacks__']['3']();</script></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_categories">
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案<span style="font-size:11px;font-weight:normal">(61)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/fly_dragon/archive/2016/12.html">2016年12月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/fly_dragon/archive/2014/11.html">2014年11月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/fly_dragon/archive/2014/10.html">2014年10月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/fly_dragon/archive/2014/09.html">2014年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/fly_dragon/archive/2014/08.html">2014年8月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/fly_dragon/archive/2013/08.html">2013年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/fly_dragon/archive/2012/06.html">2012年6月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/fly_dragon/archive/2012/05.html">2012年5月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/fly_dragon/archive/2012/01.html">2012年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/fly_dragon/archive/2011/10.html">2011年10月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/fly_dragon/archive/2011/06.html">2011年6月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/fly_dragon/archive/2011/05.html">2011年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/fly_dragon/archive/2011/03.html">2011年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/fly_dragon/archive/2011/02.html">2011年2月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/fly_dragon/archive/2011/01.html">2011年1月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/fly_dragon/archive/2010/12.html">2010年12月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/fly_dragon/archive/2010/10.html">2010年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="http://www.cnblogs.com/fly_dragon/archive/2010/09.html">2010年9月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="http://www.cnblogs.com/fly_dragon/archive/2010/08.html">2010年8月 (2)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3601093">1. Re:05-Vue入门系列之Vue实例详解与生命周期</a></li>
+        <li class="recent_comment_body">@shiter技术只是解决问题的工具而已。现在研究的最多的是教学方法。...</li>
+        <li class="recent_comment_author">--FlyDragon</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fly_dragon/p/4096316.html#3599642">2. Re:实在是睡不着了，莫名的为微软写点什么</a></li>
+        <li class="recent_comment_body">微软，我心中的痛。当微软再次辉煌的时候我已经脱离.NET阵营了。</li>
+        <li class="recent_comment_author">--气质优雅的猪</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3597195">3. Re:05-Vue入门系列之Vue实例详解与生命周期</a></li>
+        <li class="recent_comment_body">6666</li>
+        <li class="recent_comment_author">--FD小萌</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3592975">4. Re:05-Vue入门系列之Vue实例详解与生命周期</a></li>
+        <li class="recent_comment_body">马老师胖了好多<br>转前端么 <br>html5 还有vue <br>学的好快 还有unity会这么多门技术</li>
+        <li class="recent_comment_author">--shiter</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/fly_dragon/p/6220273.html#3592966">5. Re:05-Vue入门系列之Vue实例详解与生命周期</a></li>
+        <li class="recent_comment_body">马老师现在还在黑马和传智播客任教呢吗我是12年2月.net 就业班你的学生转android快两年了 公司要我做个网站 .net mvc都忘得差不多了再次打开你的教学视频 也找到了你的博客我知道现在传值......</li>
+        <li class="recent_comment_author">--shiter</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/fly_dragon/p/3946012.html">1. Html5 学习系列（六）Html5本地存储和本地数据库(64681)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2010/09/06/1819422.html">2. 搭建你的Spring.Net+Nhibernate+Asp.Net Mvc 框架 （一）搭建你的环境(32371)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2011/02/20/1958884.html">3. Entity Framework快速入门--实例篇  DatabaseFirst(26199)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/p/3940652.html">4. Html5 学习系列（五）Canvas绘图API快速入门（1）(25702)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2012/06/02/2532035.html">5. Html5 学习系列（四）文件操作API(23023)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/fly_dragon/archive/2010/12/06/1898418.html">1. 用友面试经历(80)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2011/06/15/2081063.html">2. Asp.Net MVC3 简单入门第一季（三）详解Controller之Filter(40)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2011/10/12/AspNetMVC_Pipeline.html">3. Asp.Net MVC3 简单入门第一季（四）详解Request Processing Pipeline(39)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2010/09/16/1828192.html">4. Nhibernate入门与demo(39)</a></li><li><a href="http://www.cnblogs.com/fly_dragon/archive/2010/09/07/1820449.html">5. 搭建你的Spring.Net+Nhibernate+Asp.Net Mvc 框架 （五）测试你的成果(37)</a></li></ul></div>
+</div>
+</div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2017 FlyDragon
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+<!--PageEndHtml Block Begin-->
+<script type="text/javascript" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/jiathis_r.js.下载" charset="utf-8"></script><script src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/ckepop.js.下载" charset="utf-8"></script><script src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/ckecenterpop.js.下载" charset="utf-8"></script><script type="text/javascript" src="./05-Vue入门系列之Vue实例详解与生命周期 - FlyDragon - 博客园_files/plugin.client.js.下载" charset="utf-8"></script>
+<!--PageEndHtml Block End-->
+
+
+<audio controls="controls" style="display: none;"></audio><script type="text/javascript">getFollowStatus('09cbfa7b-28b0-df11-8eb9-001cf0cd104b')</script></body><style type="text/css">#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ab20.png);}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ydd-sprite.png)}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}</style></html>

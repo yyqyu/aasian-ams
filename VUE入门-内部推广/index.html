@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
+</head>
+<body>
+<div id="app" v-on:click="myclick">
+	sss
+	{{mydata}}
+	<ul>
+		<li v-for="item in json">
+			{{item.city}}
+			{{item.Wind}}
+		</li> 
+	</ul>
+</div>
+
+<div id="app2">
+	th2
+	{{mydata}}
+</div>
+
+<script>
+new Vue({
+  el:'#app',
+  data:{
+  	mydata:'hello world hello',
+  	json : [
+  	    {
+  	        "AirPortCode": "HGH", 
+  	        "Temperature": "10℃", 
+  	        "Visib": "很好", 
+  	        "WeatherType": "晴", 
+  	        "Wind": "东风 - 3级", 
+  	        "city": "杭州"
+  	    }, 
+  	    {
+  	        "AirPortCode": "CAN", 
+  	        "Temperature": "17℃", 
+  	        "Visib": "7000米", 
+  	        "WeatherType": "多云", 
+  	        "Wind": "北偏东北风 - 2级", 
+  	        "city": "广州"
+  	    }, 
+  	    {
+  	        "AirPortCode": "PEK", 
+  	        "Temperature": "12℃", 
+  	        "Visib": "很好", 
+  	        "WeatherType": "晴", 
+  	        "Wind": "南偏西南风 - 2级", 
+  	        "city": "北京首都"
+  	    }
+  	]
+  },
+  methods:{
+  	myclick:function() {
+  		alert('点了'+this.mydata)
+  	}
+  }
+})	
+
+new Vue({
+  el:'#app2',
+  data:{
+  	mydata:'app2'
+  }
+})
+
+
+</script>
+</body>
+</html>

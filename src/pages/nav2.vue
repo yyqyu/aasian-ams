@@ -180,8 +180,9 @@ export default {
 <style scoped>
 .nav2-wrap{
 	width: 100%;
-/*    margin-top: 4px;*/
+/*  margin-top: 4px;*/
     background-color: rgb(66,67,70);
+    min-height: 650px;
 }
 .nav2-left{
 	float: left;

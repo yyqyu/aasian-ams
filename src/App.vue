@@ -81,7 +81,7 @@ export default {
           },
         ],
         navs2:[ 
-         {       
+          {       
             "name":"OVERVIEW",
             "path":"'/overview'",
             "active":"false"
@@ -122,7 +122,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'arial', Helvetica, Arial, sans-serif;
+  font-family: arial, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -168,7 +168,7 @@ a {
   text-decoration: none;
 }
 .app-foot{
-  height: 38px;
+  height: 42px;
   background-color: rgb(71,71,71);
 }
 .app-foot2{
@@ -177,6 +177,7 @@ a {
 }
 .app-wrap-wrap{
   width: 100%;
+  font-family: arial;
 }
 .app-wrap{
 margin:0 auto;
@@ -185,6 +186,7 @@ margin:0 auto;
   width: 100%;
   height: 50px;
   position: relative;
+  font-weight: bold;
 }
 .head-left{
   position: absolute;
@@ -228,7 +230,7 @@ margin:0 auto;
 .app-head li:hover {
   color: #fff;
   opacity: 1;
-  background: url(./assets/icon1.png) no-repeat;
+  background: url("./assets/icon1.png") no-repeat;
   background-position-x:10px;
   background-position-y:20px;
 }

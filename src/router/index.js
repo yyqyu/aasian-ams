@@ -18,7 +18,22 @@ import visiblelight from '../pages/nav2menu/visiblelight'
 import vapor from '../pages/nav2menu/vapor'
 import aircraft from '../pages/nav2menu/aircraft'
 import lightning from '../pages/nav2menu/lightning'
-
+import globalmodel from '../pages/nav3menu/globalmodel'
+import leibaoleida from '../pages/nav3menu/leibaoleida'
+import leibaoweixing from  '../pages/nav3menu/leibaoweixing'
+import leibaokuaigeng from  '../pages/nav3menu/leibaokuaigeng'
+import dianboquanqiu from  '../pages/nav3menu/dianboquanqiu'
+import dianboquyu from  '../pages/nav3menu/dianboquyu'
+import dianbokuaigeng from  '../pages/nav3menu/dianbokuaigeng'
+import jibingquanqiu from  '../pages/nav3menu/jibingquanqiu'
+import jibingquyu from  '../pages/nav3menu/jibingquyu'
+import jibingkuaigeng from  '../pages/nav3menu/jibingkuaigeng'
+import shandiquanqiu from  '../pages/nav3menu/shandiquanqiu'
+import shandiquyu from  '../pages/nav3menu/shandiquyu'
+import shandikuaigeng from  '../pages/nav3menu/shandikuaigeng'
+import shabaoganchen from  '../pages/nav3menu/shabaoganchen'
+import shabaojindi from  '../pages/nav3menu/shabaojindi'
+import shabaoqiangdu from  '../pages/nav3menu/shabaoqiangdu'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -94,7 +109,74 @@ export default new Router({
     },
     {
     	path:'/forecast',
-    	component:nav3
+    	component:nav3,
+        redirect:'/forecast/globalmodel',
+        children:[
+          {
+            path:'globalmodel',
+            component:globalmodel
+          },
+          {
+            path:'leibaoleida',
+            component:leibaoleida
+          },
+          {
+            path:'leibaoweixing',
+            component:leibaoweixing
+          },
+          {
+            path:'leibaokuaigeng',
+            component:leibaokuaigeng
+          },
+          {
+            path:'dianboquyu',
+            component:dianboquyu
+          },
+          {
+            path:'dianbokuaigeng',
+            component:dianbokuaigeng
+          },
+          {
+            path:'dianboquanqiu',
+            component:dianboquanqiu
+          },
+          {
+            path:'jibingkuaigeng',
+            component:jibingkuaigeng
+          },
+          {
+            path:'jibingquyu',
+            component:jibingquyu
+          },
+          {
+            path:'jibingquanqiu',
+            component:jibingquanqiu
+          },
+          {
+            path:'shandikuaigeng',
+            component:shandikuaigeng
+          },
+          {
+            path:'shandiquyu',
+            component:shandiquyu
+          },
+          {
+            path:'shandiquanqiu',
+            component:shandiquanqiu
+          },
+          {
+            path:'shabaoqiangdu',
+            component:shabaoqiangdu
+          },
+          {
+            path:'shabaojindi',
+            component:shabaojindi
+          },
+          {
+            path:'shabaoganchen',
+            component:shabaoganchen
+          }              
+        ]
     },
     {
     	path:'/advisory',

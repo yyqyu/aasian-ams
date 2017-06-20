@@ -70,7 +70,8 @@ export default {
 	         	src: require('../../assets/slideShow/pic8.jpg'),
 	         	title:'2017/1/10 08:13:18'
 	         }
-	     ]
+	     ],
+         slides2:[]
 	      
 	  }
     },

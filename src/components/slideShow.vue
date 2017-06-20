@@ -1,7 +1,7 @@
 <!-- 轮播图组件 -->
 <template>
 <div class="lunbo">
-	<div class="super-left">
+	<div class="super-left" v-bind:style="{ height:clientHeights}">
 			<div class="left">
 			    <div class="slide-data">{{slides[nowIndex].title}}</div>
 				<div class="slide-show" >
@@ -44,10 +44,6 @@
 		 		<a class="right-a" :href="item.src" target="_blank"></a>
 		 	</li>
 		 </ul>
-		 <!-- <div class="right-3th">
-		 	<div class="right3th-left">Save As</div>
-		 	<div class="right3th-right">Print</div>
-		 </div> -->
 		 <div class="right-4th">
 		 	<ul>
 		 		<li @click="goto(prevIndex)" class="right4th-li right4th-li1th fa fa-backward"></li>
@@ -81,7 +77,8 @@ export default {
 		return {
 			nowIndexes:[],
 			nowIndex: 0,
-			isShow: true
+			isShow: true,
+			clientHeights: '680px'
 		}
 	},
 	methods: {
@@ -137,12 +134,19 @@ export default {
 			 else {
 			 	   return this.nowIndex +1
 			 }
-		}
+		},
+
 	},
 	mounted () { //组件渲染完毕执行该函数
 		//console.log(this.slides)
 		//this.runInv()
         //this.nowIndex.push(hpa);
+        	
+        this.clientHeights = `${window.innerHeight-92}px`;
+        const that = this
+        window.onresize = function temp() {
+            that.clientHeights = `${window.innerHeight-92}px`;
+        }
 	}
 }
 </script>
@@ -163,6 +167,7 @@ export default {
   margin-top: 9px;
   position: relative;
   background-color: white;
+  min-height: 655px;
 }
 .left{
 	min-width: 780px;
