@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import jquery from 'jquery'
+
 jQuery(function () {
   $("p").click(function(){
 		 	alert(2)

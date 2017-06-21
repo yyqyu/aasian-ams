@@ -40,12 +40,6 @@ methods: {
 .drop-leave-active {
   transform: translateY(-500px);
 }
-
-/*.dialog-wrap {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}*/
 .dialog-cover {
   background: #000;
   opacity: .3;

@@ -27,7 +27,7 @@
      <div class="nav-right">
        <keep-alive>
            <router-view></router-view>
-         </keep-alive>
+       </keep-alive>
      </div>
  </div>
 </template>
@@ -134,8 +134,7 @@ export default {
                       } 
                   ]
                  }
-      ] 
-
+      ]
     }
   },
   methods: {
@@ -160,19 +159,20 @@ export default {
 <style scoped>
 .nav-wrap{
   width: 100%;
-    background-color: rgb(66,67,70);
-    min-height: 650px;
+  background-color: rgb(66,67,70);
+  min-height: 650px;
 }
 .nav-left{
   float: left;
-  width: 310px;
-    height: 560px;
+  width: 265px;
+  height: 560px;
+  margin-top: 50px;
 } 
 .nav-right{
-    width: auto;
-    margin-left: 310px;
-    background-color: rgb(66,67,70);
-    border: 1px red solid
+  width: auto;
+  margin-left: 265px;
+  background-color: rgb(66,67,70);
+  border: 1px red solid;
 }
 .ul-1th{
   cursor: pointer;
@@ -182,23 +182,23 @@ export default {
   font-family: arial;
   font-weight: bold;
   display: block;
-  font-size: 14px;
   font-weight: bold;
   text-align: left;
   height: 40px;
   color: #fff;
   border-bottom: 2px solid #3a3b3d;
   line-height: 32px;
-  padding-left: 10px;
+  padding-left: 15px;
   letter-spacing: 1px;
+  font-size: 12px;
 }
 .li-1th{
   background:url("../assets/menu-icon-up.png") no-repeat ;
-  background-position:295px 17px;
+  background-position: 245px 12px;
 }
 .li-1th-locked{
-    background:url("../assets/menu-icon-down.png") no-repeat ;
-    background-position:295px 17px;
+  background:url("../assets/menu-icon-down.png") no-repeat ;
+  background-position:245px 12px;
 }
 .li-2th{
   height: 40px;
@@ -206,25 +206,20 @@ export default {
   background: #505153;
   color: #d3d6df;
   font-size: 14px;
-    font-weight: bold;
-    text-align: left;
-    height: 40px;
-    color: #fff;
-    border-bottom: 1px solid #3a3b3d;
-    line-height: 40px;
-    padding-left: 18px;
-    letter-spacing: 1px;
+  font-weight: bold;
+  text-align: left;
+  height: 40px;
+  color: #fff;
+  border-bottom: 1px solid #3a3b3d;
+  line-height: 40px;
+  padding-left: 18px;
+  letter-spacing: 1px;
+  font-size: 12px; 
 }
 .li-2th:hover{
-  /*background: #4491e0 url("../assets/menu-left-icon.png") no-repeat;
-  background-position: 252px -2px;
-  background-size: 21px 45px;*/
   background: #4491e0
 }
 .li-2th-clicked{
-  /*background: #4491e0 url("../assets/menu-left-icon.png") no-repeat;
-  background-position: 252px -2px;
-  background-size: 21px 45px;*/
   background: #4491e0
 }
 .ul-2th{

@@ -187,7 +187,8 @@ export default {
             layers: [
               new ol.layer.Tile({
                     source: new ol.source.TileWMS({
-                        url: 'http://132.134.245.71:8093/geoserver/World/wms',
+                       // url: 'http://132.134.245.71:8093/geoserver/World/wms',
+                        url:'http://106.37.210.226:8093/geoserver/World/wms',
                         params: { 'LAYERS': 'World:world_tif', 'TILED': true }
                     })
               })

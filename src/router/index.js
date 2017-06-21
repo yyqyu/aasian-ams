@@ -34,6 +34,9 @@ import shandikuaigeng from  '../pages/nav3menu/shandikuaigeng'
 import shabaoganchen from  '../pages/nav3menu/shabaoganchen'
 import shabaojindi from  '../pages/nav3menu/shabaojindi'
 import shabaoqiangdu from  '../pages/nav3menu/shabaoqiangdu'
+import h06 from '../pages/nav4menu/h06'
+import h1224 from '../pages/nav4menu/h1224'
+import h612 from '../pages/nav4menu/h612'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -51,8 +54,8 @@ export default new Router({
     {
     	path:'/observation',
     	component:nav2,
-        redirect:'/observation/high-altitude',
-        children: [
+      redirect:'/observation/high-altitude',
+      children: [
          {
             path:'high-altitude',
             component:highaltitude
@@ -105,13 +108,13 @@ export default new Router({
             path:'lightning',
             component:lightning
          }
-        ]
+      ]
     },
     {
     	path:'/forecast',
     	component:nav3,
-        redirect:'/forecast/globalmodel',
-        children:[
+      redirect:'/forecast/globalmodel',
+      children:[
           {
             path:'globalmodel',
             component:globalmodel
@@ -176,11 +179,26 @@ export default new Router({
             path:'shabaoganchen',
             component:shabaoganchen
           }              
-        ]
+      ]
     },
     {
     	path:'/advisory',
-    	component:nav4
+    	component:nav4,
+      redirect:'/advisory/h06',
+      children:[
+        {
+          path:'h06',
+          component:h06
+        },
+        {
+          path:'h612',
+          component:h612
+        },
+        {
+          path:'h1224',
+          component:h1224
+        }   
+      ]
     },
     {
     	path:'/register',
