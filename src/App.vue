@@ -24,6 +24,19 @@
             <router-link to="/" class="h-right-a">download</router-link>
             <span class="h-right-span" v-if="username=== ''" @click="logClick">login</span>
             <!-- <a class="h-right-a" v-if="username=== ''" href="http://www.w3school.com.cn" target="_blank">register</a> -->
+             
+             <div class="h-right-div" v-on:click="closeSet">
+                <!-- <div class="h-set-covers" v-if="isShowSet" v-on:click="closeSet"></div> -->
+                <div class="h-set-content" v-if="isShowSet">               
+                   <router-link  :to="{path:'/management'}"
+                                 tag="span"
+                   >
+                     setting
+                   </router-link>
+                   <br/>   
+                   <span>xxx</span>
+                </div>
+             </div>
           </div> 
     </div>
     <div class="app-content">
@@ -56,6 +69,7 @@ export default {
   },
   data (){
     return {
+       isShowSet:false,
        isShowLogDialog: false,
        username:'',
         navs:[        
@@ -95,6 +109,9 @@ export default {
     }
   },
   methods: {
+     closeSet () {
+        this.isShowSet = !this.isShowSet
+     },
      aboutClick () {
         this.isShowAboutDialog = true
      },
@@ -177,6 +194,7 @@ a {
 }
 .app-wrap-wrap{
   width: 100%;
+  min-width: 1360px;
   font-family: arial;
 }
 .app-wrap{
@@ -185,6 +203,7 @@ margin:0 auto;
 .app-head{
   width: 100%;
   height: 50px;
+  min-width: 1360px;
   position: relative;
   font-weight: bold;
 }
@@ -247,6 +266,17 @@ margin:0 auto;
   position: absolute;
   top: 0;
 }
+.h-right-div{
+  position: absolute;
+  left: 200px;
+  top: 21px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid rgb(179,179,179);
+  cursor: pointer;
+}
 .h-right-a{
     opacity: 0.65;
     padding-left: 5px;
@@ -303,5 +333,20 @@ margin:0 auto;
 .g-form-error {
   color: red;
   padding-left: 15px;
+}
+.h-set-cover{
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.h-set-content{
+  position: absolute;
+  top: 6px;
+  left: -54px;
+  font-size: 14px;
+  color: rgb(165,165,165);
 }
 </style>

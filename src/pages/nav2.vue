@@ -186,8 +186,9 @@ export default {
 }
 .nav2-left{
 	float: left;
-	width: 230px;
+	width: 270px;
     height: 560px;
+    margin-top: 15px;
 }	
 .nav2-right{
     width: auto;
@@ -206,20 +207,19 @@ export default {
 	font-size: 14px;
     font-weight: bold;
     text-align: left;
-    height: 40px;
     color: #fff;
     border-bottom: 2px solid #3a3b3d;
     line-height: 40px;
-    padding-left: 10px;
+    padding-left: 15px;
     letter-spacing: 1px;
 }
 .li-1th{
 	background:url("../assets/menu-icon-up.png") no-repeat ;
-	background-position:220px 17px;
+	background-position:245px 17px;
 }
 .li-1th-locked{
     background:url("../assets/menu-icon-down.png") no-repeat ;
-    background-position:220px 17px;
+    background-position:245px 17px;
 }
 .li-2th{
 	height: 40px;

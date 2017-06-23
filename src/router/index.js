@@ -37,6 +37,14 @@ import shabaoqiangdu from  '../pages/nav3menu/shabaoqiangdu'
 import h06 from '../pages/nav4menu/h06'
 import h1224 from '../pages/nav4menu/h1224'
 import h612 from '../pages/nav4menu/h612'
+import user from '../pages/guanlimenu/user'
+import authority from '../pages/guanlimenu/authority'
+import information from '../pages/guanlimenu/information'
+import notice from '../pages/guanlimenu/notice'
+import links from '../pages/guanlimenu/links'
+import products from '../pages/guanlimenu/products'
+import upload from '../pages/guanlimenu/upload'
+import management from '../pages/management'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -198,6 +206,41 @@ export default new Router({
           path:'h1224',
           component:h1224
         }   
+      ]
+    },
+    {
+      path:'/management',
+      component:management,
+      redirect:'/management/user',
+      children:[
+         {
+           path:'user',
+           component:user
+         },
+         {
+           path:'authority',
+           component:authority
+         },
+         {
+           path:'information',
+           component:information
+         },
+         {
+           path:'notice',
+           component:notice
+         },
+         {
+           path:'links',
+           component:links
+         },
+         {
+           path:'products',
+           component:products
+         },
+         {
+           path:'upload',
+           component:upload
+         }
       ]
     },
     {

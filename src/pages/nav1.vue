@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-	   <div class="gis-box" id="map">
+	   <div class="gis-box" id="mapid">
         <div class="funBtn" v-on:click="kaiguan">
         </div>
         <div class="fun-panel" v-bind:class="{panelt:isPanelt}">
@@ -28,6 +28,7 @@
               </template>
         </div>	    
 	   </div>
+
   </div> 	
 </template>
 
@@ -151,56 +152,54 @@ export default {
   methods: {
     kaiguan: function() {
         this.isPanelt = !this.isPanelt
-
     },
     checklist: function(index) {
     	if(this.nowIndexes.indexOf(index) === -1 ){
             this.nowIndexes.push(index)  
-            //地图增加该参数
-            this.$http.post('http://localhost:3000/getPrice',{state:'add',index})
-            .then((res)=>{
-
-            },(err)=>{
-              return 0
-            })
-  		}
-  		else {
-        //地图减少该参数
-        this.$http.post('http://localhost:3000/getPrice',{state:'remove',index})
-        .then((res)=>{
           
-        },(err)=>{
-          return 0
-        })
+            var KHlayer = new ol.layer.Tile({
+                   opacity:0.4,
+                   source: new ol.source.TileWMS({
+                       url: 'http://106.37.210.226:8091/ncWMS2/wms',
+                       params: { 'LAYERS': 'kuihua/Light', 'tiled': true }
+                   }),
+                   zIndex:0
+               });    
+           //  alert(this.map)
+               map.addLayer(KHlayer);
+  		}
+  		else {    
   			this.nowIndexes = _.remove(this.nowIndexes,(idx)=>{
                  return idx !== index
-            })
+        })
   		}	
-    },
+    },  
     checkActive (index) {
   		return this.nowIndexes.indexOf(index) == -1
-  	}
+  	},
+    ditu () {
+         var map = new ol.Map({
+             control:[],
+             layers: [
+                       new ol.layer.Tile({
+                               source: new ol.source.TileWMS({
+                               url:'http://106.37.210.226:8093/geoserver/World/wms',
+                               params: { 'LAYERS': 'World:world_tif', 'TILED': true }
+                             })
+                       })
+             ],
+             target: 'mapid',
+             extend: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
+             projection: new ol.proj.Projection('EPSG:3857'),
+             view: new ol.View({
+                 center: ol.proj.fromLonLat([115.25, 41.03], 'EPSG:3857'),
+                 zoom: 4
+             })
+         })
+    }
   },
   mounted () {
-      var map = new ol.Map({
-            control:[],
-            layers: [
-              new ol.layer.Tile({
-                    source: new ol.source.TileWMS({
-                       // url: 'http://132.134.245.71:8093/geoserver/World/wms',
-                        url:'http://106.37.210.226:8093/geoserver/World/wms',
-                        params: { 'LAYERS': 'World:world_tif', 'TILED': true }
-                    })
-              })
-            ],
-            target: 'map',
-            extend: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
-            projection: new ol.proj.Projection('EPSG:3857'),
-            view: new ol.View({
-                center: ol.proj.fromLonLat([115.25, 41.03], 'EPSG:3857'),
-                zoom: 4
-            })
-        });
+      this.ditu()
   }
 }
 </script>

@@ -6,6 +6,24 @@
   	<meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
     <title>asian-weather-service</title>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript">
+       function IEVersion(){
+           var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera; 
+                if(isIE)  
+                {  
+                     var reIE = new RegExp("MSIE (\\d+\\.\\d+);");  
+                     reIE.test(userAgent);  
+                     var fIEVersion = parseFloat(RegExp["$1"]);  
+                     if(fIEVersion == 10)  
+                     { return "IE10";}  
+                     else if(fIEVersion == 11)  
+                     { return "IE11";}  
+                     else  
+                     { alert("The browser version is too low. Please upgrade to the latest version of IE or use the Google browser to open the site")}
+                }  
+       }
+    </script>
   </head>
   <body>
     <div id="app"></div>

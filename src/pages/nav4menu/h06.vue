@@ -18,8 +18,29 @@
   	 	  	 	>
   	 	  	 		{{item.title}}
   	 	  	 	</li>
+  	 	  	 	<p class="dialog-close" @click="closeMyself">x</p>
   	 	  	 </ul>
+  	 	  	 <table class="table-1th">
+  	 	  	 	  <tr>
+  	 	  	 	  	 <th class="th-1th">Original</th>
+  	 	  	 	  	 <th class="th-1th">Sigment</th>
+  	 	  	 	  </tr>
+  	 	  	 	  <tr v-for="tds in baowen" class="tr-1th">
+  	 	  	 	  	 <td class="td-1th">DTG:{{tds.DTG}}<br/>SAC:{{tds.SAC}} <br/> VALID:{{tds.VALID}}
+  	 	  	 	  	 </td>
+  	 	  	 	  	 <td class="td-1th">
+  	 	  	 	  	         {{tds.SIGMENT}}
+  	 	  	 	  	         <br/>
+  	 	  	 	  	         <span class="td-span" 
+                                   v-on:click="graphics"
+  	 	  	 	  	         >
+  	 	  	 	  	         	Graphics
+  	 	  	 	  	         </span>
+  	 	  	 	  	 </td>
+  	 	  	 	  </tr>
+  	 	  	 </table>
   	 	  </div>
+
   	 	  <div class="baowen-bottom">
   	 	  	
   	 	  </div>
@@ -35,7 +56,7 @@ export default{
 	data (){
 		return {
 			nowIndexes:[],
-			isShow:true,
+			isShow:false,
 			title:"Asian Hazardouc Weather Advision Products > Hazardous Weather(TS,Turb,Ice,DS,MTW)",
 			buttontitle:"Greate SIGMET",
 			riqi:[
@@ -44,6 +65,22 @@ export default{
               {"title":"Ice","id":"Ice"},
               {"title":"DS","id":"DS"},
               {"title":"MTW","id":"MTW"}
+			],
+			baowen:[
+              {
+              	"DTG":"20170309/1200z",
+              	"SAC":"BEIJING",
+              	"VALID":"1500000/210000",
+              	"SIGMENT":"ZBPE SIGMENT 1 VALID ",
+              	"id":"01"
+              },
+              {
+              	"DTG":"20160505/1222z",
+              	"SAC":"BEIJING",
+              	"VALID":"8888888",
+              	"SIGMENT":"ZBPE SIGMENT 1 VALID ",
+              	"id":"02"
+              }  
 			]
 		}
 	},
@@ -54,7 +91,7 @@ export default{
        closeDialog (attr) {
           this[attr]= false
        },
-	   	checkList: function(index,id){
+	    checkList: function(index,id){
 	         if(this.nowIndexes.indexOf(index) === -1){
 	         	this.nowIndexes=[]
 	         	this.nowIndexes.push(index)
@@ -62,17 +99,36 @@ export default{
                 // 按照id值更新数据
                 // this.$http.get('',{id})
                 // .then((res)=>{
-
+                //       this.baowen = res.data
                 // },(err)=>{
                 // 	console.log(err)
                 // })
-                
 	         }
 	   	},
 	   	checkActive (index) {
 	   	   return this.nowIndexes.indexOf(index) != -1 
+	   	},
+	   	closeMyself (){
+	   		this.isShow = false
+	   	},
+	   	graphics (id) {
+
 	   	}
-	}
+	},
+
+	//第一次加载请求的数据源
+	// creted: function (){
+ //        this.$http.get('')
+ //        .then( (res) =>{
+ //             this.baowen = res.data
+ //        },(err) =>{
+ //        	console.log(err)
+ //        })  
+	// },
+	// mounted () {
+ //        this.nowIndexes.push(0)
+ //        this.checkActive(0)
+	// }
 }	
 </script>
 
@@ -80,6 +136,13 @@ export default{
 .wrap{
 
 }	
+.dialog-close{
+	float: right;
+	padding-right:5px;
+    font-size: 27px;
+    color: rgb(193,193,193);
+    cursor: pointer;
+}
 .top{
 	height: 45px;
 	color: white;
@@ -92,19 +155,42 @@ export default{
 	border-radius: 14px;
 	min-width: 1070px;
 	position: relative;
+	background-color: rgb(250,250,250);
 }
 .baowen{
   width: 900px;
-  height: 611px;
+  height: 625px;
+  top: -7px;
   border:7px rgb(238,238,238) solid;
   position: absolute;
   left: 50%;
-  margin-left: -450px;
+  margin-left: -470px;
   padding-top: 15px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 15px;
   box-shadow: -1px 0px 29px 0px rgb(208,208,208);
+  background-color: white;
+}
+.table-1th{
+	width: 900px;
+	height: 550px;
+	background-color: rgb(235,236,240);
+	padding-left: 15px;
+}
+.th-1th{
+	text-align: left;
+	color: #3399cc;
+	font-size: 14px;
+	font-weight: bold;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid rgb(208,208,208);
+}
+.td-1th{
+	min-height: 200px;
+	border-bottom: 1px solid rgb(208,208,208);
+	padding-top: 12px;
 }
 .ul-1th{
 	overflow: hidden;
@@ -118,6 +204,8 @@ export default{
 	color: rgb(68,145,224);
 	background-color: white;
 	cursor: pointer;
+	font-size: 14px;
+	font-weight: bold;
 }
 .li-1th-locked{
 	float: left;
@@ -125,6 +213,8 @@ export default{
 	height: 29px;
 	line-height: 30px;
 	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
 	color: rgb(68,145,224);
 	background-color: rgb(235,236,240);
 	border-top:1px solid rgb(205,206,209);
@@ -142,8 +232,24 @@ export default{
 	text-align: center;
 	line-height: 30px;
 	color: white;
-	cursor: pointer;
+	cursor: pointer; 
 	background-color: rgb(193,219,245);
 	border-radius: 7px;
+}
+.td-span{
+	display: inline-block;
+	margin-top: 20px;
+	width: 105px;
+	height: 27px;
+	color: white;
+	background-color: rgb(68,145,224);
+	text-align: center;
+	line-height: 27px;
+	font-size: 14px;
+	cursor: pointer;
+	box-shadow:0 0 10px 2px rgb(68,145,224);  
+}
+.tr-1th{
+ 
 }
 </style>
