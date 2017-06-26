@@ -40,6 +40,8 @@ export default {
   data () {
      return {
      	isPanelt:false,
+      KHlayer:null,
+      map:null,
      	nowIndexes:[],
      	checkList: {
      		obs: {
@@ -156,19 +158,22 @@ export default {
     checklist: function(index) {
     	if(this.nowIndexes.indexOf(index) === -1 ){
             this.nowIndexes.push(index)  
-          
-            var KHlayer = new ol.layer.Tile({
+
+            this.KHlayer = new ol.layer.Tile({
                    opacity:0.4,
                    source: new ol.source.TileWMS({
                        url: 'http://106.37.210.226:8091/ncWMS2/wms',
                        params: { 'LAYERS': 'kuihua/Light', 'tiled': true }
                    }),
                    zIndex:0
-               });    
-           //  alert(this.map)
-               map.addLayer(KHlayer);
+            });    
+            this.map.addLayer(this.KHlayer);
+            
   		}
   		else {    
+         //alert(KHlayer)
+         this.KHlayer.setVisible(false);
+
   			this.nowIndexes = _.remove(this.nowIndexes,(idx)=>{
                  return idx !== index
         })
@@ -176,35 +181,32 @@ export default {
     },  
     checkActive (index) {
   		return this.nowIndexes.indexOf(index) == -1
-  	},
-    ditu () {
-         var map = new ol.Map({
-             control:[],
-             layers: [
-                       new ol.layer.Tile({
-                               source: new ol.source.TileWMS({
-                               url:'http://106.37.210.226:8093/geoserver/World/wms',
-                               params: { 'LAYERS': 'World:world_tif', 'TILED': true }
-                             })
-                       })
-             ],
-             target: 'mapid',
-             extend: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
-             projection: new ol.proj.Projection('EPSG:3857'),
-             view: new ol.View({
-                 center: ol.proj.fromLonLat([115.25, 41.03], 'EPSG:3857'),
-                 zoom: 4
-             })
-         })
-    }
+  	}
   },
   mounted () {
-      this.ditu()
+      this.map = new ol.Map({
+          control:[],
+          layers: [
+                    new ol.layer.Tile({
+                            source: new ol.source.TileWMS({
+                            url:'http://106.37.210.226:8093/geoserver/World/wms',
+                            params: { 'LAYERS': 'World:world_tif', 'TILED': true }
+                          })
+                    })
+          ],
+          target: 'mapid',
+          extend: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
+          projection: new ol.proj.Projection('EPSG:3857'),
+          view: new ol.View({
+              center: ol.proj.fromLonLat([115.25, 41.03], 'EPSG:3857'),
+              zoom: 4
+          })
+      })
   }
 }
 </script>
 
-<style scope>
+<style scoped>
 .main{
     height: 570px;
     padding:10px;
@@ -218,13 +220,12 @@ export default {
 .gis-box{
     width:100%;
     height:100%;
-   /* background:url("../assets/gisBG.jpg") no-repeat center;*/
     position:relative;
 }
 .main .gis-box .funBtn{
     width:38px;
     height:36px;
-    background:url("../assets/gisBtn.png") no-repeat center;
+    background:url('/static/img/gisBtn.png') no-repeat center;
     position:absolute;
     right:20px;
     top:20px;
@@ -296,7 +297,6 @@ export default {
     font-size:23px;
 }
 .main .gis-box .fun-panel .classify{
-    /*padding:8px 0;*/
     border-top:2px solid #dddddd;
     margin-top:8px;
 }

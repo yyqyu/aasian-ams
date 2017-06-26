@@ -97,7 +97,6 @@ export default {
 		clearInv () {
            clearInterval(this.invId)  
 		},
-
 		checkList: function(index) {
 			//alert(this.formLi[0].altitude)
 
