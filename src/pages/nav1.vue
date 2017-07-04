@@ -208,7 +208,8 @@ export default {
 
 <style scoped>
 .main{
-    height: 570px;
+    min-height: 570px;
+    height: 100%;
     padding:10px;
     background:#f0f2f5;
     border-left: 8px solid #4d4d4d;

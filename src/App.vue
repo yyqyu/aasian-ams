@@ -9,20 +9,21 @@
             </span>         
          </router-link>  
          <ul>
-             <router-link v-for="item in navs"
+             <router-link v-for="(item,index) in navs"
                           :key="item.name"
                           :to="{path:item.path}"
                           tag="li"
                           class="head-li"
                           active-class="active"
+                          :class="'item'+index"
              >  
                   {{item.name}}
              </router-link>
          </ul>       
          <div class="head-right">
             <router-link to="/" class="h-right-a">Co-work</router-link>
-            <router-link to="/" class="h-right-a">download</router-link>
-            <span class="h-right-span" v-if="username=== ''" @click="logClick">login</span>
+            <router-link to="/" class="h-right-a">Download</router-link>
+            <span class="h-right-span" v-if="username=== ''" @click="logClick">Welcome AMC!</span>
             <!-- <a class="h-right-a" v-if="username=== ''" href="http://www.w3school.com.cn" target="_blank">register</a> -->
              
              <div class="h-right-div" v-on:click="closeSet">
@@ -92,18 +93,6 @@ export default {
             name:'ASIAN HAZARDOUS WEATHER ADVISORY ADVISORY PRODUCTS',
             path:'/advisory',
             active:false
-          },
-        ],
-        navs2:[ 
-          {       
-            "name":"OVERVIEW",
-            "path":"'/overview'",
-            "active":"false"
-          },
-          {
-            "name":"OBSERVATION",
-            "path":"'/observation'",
-            "active":"false"
           }
         ]
     }
@@ -206,11 +195,12 @@ margin:0 auto;
   min-width: 1360px;
   position: relative;
   font-weight: bold;
+  background: black;
 }
 .head-left{
   position: absolute;
-  width: 357px;
-  left: 0;
+  width: 375px;
+  left: 20px;
   color: #fff;
   background: black;
   height: 100%;
@@ -218,40 +208,44 @@ margin:0 auto;
 }
 .headleft-span{
   display: block;
-  margin-top: -31px;
+  margin-top: -35px;
   height: 31px;
-  margin-left: 51px;
+  margin-left: 60px;
   opacity: 0.9;
   font-size: 16px;
 }
 .app-head ul{ 
-  margin-left: 357px;
+  margin-left: 425px;
   margin-right: 255px;
   color: #fff;
   background: black;
-  min-width: 683px;
+  min-width: 778px;
   height: 100%;
 }
 .app-head li{
   height: 30px;
-  font-size: 13px;
+  font-size: 14px;
   float: left;
   text-align: left;
   padding-top: 18px;
-  padding-left: 24px;
+  padding-left: 35px;
   line-height: 11px;
-  opacity: 0.65;
+  /*opacity: 0.65;*/
   word-wrap: break-word;
-  max-width: 204px;
+  max-width: 228px;
   cursor: pointer;
+  font-weight: bold;
+}
+.item3{
+  padding-top: 12px !important;
 }
 .app-head li.active,
 .app-head li:hover {
   color: #fff;
   opacity: 1;
   background: url("./assets/icon1.png") no-repeat;
-  background-position-x:10px;
-  background-position-y:20px;
+  background-position-x:18px;
+  background-position-y:17px;
 }
 .app-head li a{
   display: block
@@ -262,13 +256,13 @@ margin:0 auto;
   color: white;
   right: 0;
   padding-top: 17px;
-  width: 255px;
+  width: 285px;
   position: absolute;
   top: 0;
 }
 .h-right-div{
   position: absolute;
-  left: 200px;
+  left: 265px;
   top: 21px;
   width: 0;
   height: 0;

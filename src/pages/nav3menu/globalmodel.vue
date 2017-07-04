@@ -10,7 +10,7 @@
   	 	</li>
   	 </ul>
   </div>
-  <div class="bottom">
+  <div class="bottom" v-bind:style="{ height:clientHeights}">
   	  
   </div>	
 </div>	
@@ -22,6 +22,7 @@ export default{
   data () {
   	return {
   		nowIndexes:[],
+      clientHeights:null,
   		navlist:[
           {"title":"Wind&Geopotential Height&Temperature"},
           {"title":"Cumulative Precipitation"},
@@ -44,7 +45,7 @@ export default{
   	checkActive (index) {
   	   return this.nowIndexes.indexOf(index) != -1 
   	}
-  }
+  },
   // created: function{
   //    this.$http.get('')
   //    .then( (res)=>{
@@ -53,12 +54,19 @@ export default{
   //       console.log(err)
   //    })
   // }  
+  mounted () {
+            this.clientHeights = `${window.innerHeight-163}px`;
+            const that = this
+            window.onresize = function temp() {
+                that.clientHeights = `${window.innerHeight-163}px`;
+            }
+  }
 }
 </script>
 
 <style scoped>
 .wrap{
-	margin-top: 25px;
+	/*margin-top: 25px;*/
 }
 .top-li{
 	padding-right: 6px;
@@ -95,7 +103,7 @@ export default{
 }
 .bottom{
 	width: 98%;
-	height: 655px;
+	min-height: 655px;
 	border: 7px solid rgb(238,238,238);
 	border-radius: 14px;
 	min-width: 1070px;

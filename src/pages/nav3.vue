@@ -172,7 +172,7 @@ export default {
   width: auto;
   margin-left: 265px;
   background-color: rgb(66,67,70);
-  border: 1px red solid;
+  /*border: 1px rgb(66,67,70) solid;*/
 }
 .ul-1th{
   cursor: pointer;
@@ -201,26 +201,31 @@ export default {
   background-position:245px 12px;
 }
 .li-2th{
-  height: 40px;
+  height: 20px;
   text-align: left;
-  background: #505153;
+  background: #424346;
   color: #d3d6df;
   font-size: 14px;
   font-weight: bold;
   text-align: left;
-  height: 40px;
   color: #fff;
   border-bottom: 1px solid #3a3b3d;
-  line-height: 40px;
+  line-height: 20px;
   padding-left: 18px;
   letter-spacing: 1px;
   font-size: 12px; 
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .li-2th:hover{
-  background: #4491e0
+  background: url("../assets/menu-icon-down2.png") no-repeat;
+  background-position: 257px 3px;
+  background-color: #4491e0;
 }
 .li-2th-clicked{
-  background: #4491e0
+  background: url("../assets/menu-icon-down2.png") no-repeat;
+  background-position: 257px 3px;
+  background-color: #4491e0;
 }
 .ul-2th{
   display:none

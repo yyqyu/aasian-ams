@@ -4,11 +4,10 @@
   	 {{title}}
   </div>
 
-  <div class="bottom">
-  	 <div class="bottom-button" v-on:click="tanchuangClick">
+  <div class="bottom" v-bind:style="{ height:clientHeights}">
+  	 <div class="bottom-button"  v-on:click="tanchuangClick">
   	     {{buttontitle}}
   	 </div>
-
   	 <div v-if="isShow" class="baowen">
   	 	  <div class="baowen-top">
   	 	  	 <ul class="ul-1th">
@@ -56,8 +55,9 @@ export default{
 	data (){
 		return {
 			nowIndexes:[],
+			clientHeights:null,
 			isShow:false,
-			title:"Asian Hazardouc Weather Advision Products > Hazardous Weather(TS,Turb,Ice,DS,MTW)",
+			title:"Asian Hazardous Weather Advision Products  >  Hazardous Weather(TS、Turb、Ice、DS、MTW)",
 			buttontitle:"Greate SIGMET",
 			riqi:[
               {"title":"TS","id":"TS"},
@@ -91,7 +91,7 @@ export default{
        closeDialog (attr) {
           this[attr]= false
        },
-	    checkList: function(index,id){
+	   checkList: function(index,id){
 	         if(this.nowIndexes.indexOf(index) === -1){
 	         	this.nowIndexes=[]
 	         	this.nowIndexes.push(index)
@@ -113,22 +113,30 @@ export default{
 	   	},
 	   	graphics (id) {
 
+	   	},
+	   	setHeight (){
+
 	   	}
 	},
-
 	//第一次加载请求的数据源
-	// creted: function (){
- //        this.$http.get('')
- //        .then( (res) =>{
- //             this.baowen = res.data
- //        },(err) =>{
- //        	console.log(err)
- //        })  
-	// },
-	// mounted () {
- //        this.nowIndexes.push(0)
- //        this.checkActive(0)
-	// }
+	//creted: function (){
+        // this.$http.get('')
+        // .then( (res) =>{
+        //      this.baowen = res.data
+        // },(err) =>{
+        // 	console.log(err)
+        // })  
+//	},
+	mounted () {
+        // this.nowIndexes.push(0)
+        // this.checkActive(0)
+
+	        this.clientHeights = `${window.innerHeight-159}px`;
+	        const that = this
+	        window.onresize = function temp() {
+	            that.clientHeights = `${window.innerHeight-159}px`;
+	        }
+	}
 }	
 </script>
 
@@ -150,7 +158,8 @@ export default{
 }
 .bottom{
 	width: 98%;
-	height: 655px;
+	height: 100%;
+	min-height: 655px;
 	border: 7px solid rgb(238,238,238);
 	border-radius: 14px;
 	min-width: 1070px;
@@ -169,7 +178,7 @@ export default{
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 15px;
-  box-shadow: -1px 0px 29px 0px rgb(208,208,208);
+ /* box-shadow: -1px 0px 29px 0px rgb(208,208,208);*/
   background-color: white;
 }
 .table-1th{

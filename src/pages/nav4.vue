@@ -68,10 +68,10 @@ export default{
   width: auto;
   margin-left: 265px;
   background-color: rgb(66,67,70);
-  border: 1px red solid;
+ /* border: 1px red solid;*/
 }
 .li-1th{
-  height: 38px;
+  height: 40px;
   border-bottom: 2px solid #3a3b3d;
 }
 .span-1th{
@@ -79,24 +79,7 @@ export default{
   background-position: 245px 12px;
   font-family: arial;
   font-weight: bold;
-  display: block;
-  font-weight: bold;
-  text-align: left;
-  height: 22px;
-  color: #fff;
-  line-height: 32px;
-  padding-left: 15px;
-  letter-spacing: 1px;
-  font-size: 12px;
-  cursor: pointer;
-}
-.span-1th-locked{
-  background:url("../assets/menu-icon-down.png") no-repeat ;
-  background-position:245px 12px;
-  background-color: rgb(68,145,224);
-  font-family: arial;
-  font-weight: bold;
-  display: block;
+  display: inline-block;
   font-weight: bold;
   text-align: left;
   height: 22px;
@@ -105,5 +88,26 @@ export default{
   padding-left: 15px;
   letter-spacing: 1px;
   font-size: 12px;
+  cursor: pointer;
+  margin-top: 9px;
+  width: 250px;
+}
+.span-1th-locked{
+  background:url("../assets/menu-icon-down2.png") no-repeat ;
+  background-position:257px 5px;
+  background-color: rgb(68,145,224);
+  font-family: arial;
+  font-weight: bold;
+  display: inline-block;
+  font-weight: bold;
+  text-align: left;
+  height: 22px;
+  color: #fff;
+  line-height: 22px;
+  padding-left: 15px;
+  letter-spacing: 1px;
+  font-size: 12px;
+  margin-top: 9px;
+  width: 250px;
 }
 </style>

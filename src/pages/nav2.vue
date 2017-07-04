@@ -54,7 +54,7 @@ export default {
 	  			]
 	  		},
 	  		storms:{
-	  			title:'storms',
+	  			title:'Thunderstorm、Sand/Dust storm',
 	  			list:[
 		           {
 	                name:'thunderstorm monitoring',
@@ -211,42 +211,42 @@ export default {
     border-bottom: 2px solid #3a3b3d;
     line-height: 40px;
     padding-left: 15px;
-    letter-spacing: 1px;
+   /* letter-spacing: 1px;*/
 }
 .li-1th{
 	background:url("../assets/menu-icon-up.png") no-repeat ;
-	background-position:245px 17px;
+	background-position:250px 17px;
 }
 .li-1th-locked{
     background:url("../assets/menu-icon-down.png") no-repeat ;
-    background-position:245px 17px;
+    background-position:250px 17px;
 }
 .li-2th{
-	height: 40px;
+	height: 20px;
 	text-align: left;
-	background: #505153;
+	background: #424346;
 	color: #d3d6df;
 	font-size: 14px;
     font-weight: bold;
     text-align: left;
-    height: 40px;
+    height: 20px;
     color: #fff;
     border-bottom: 1px solid #3a3b3d;
-    line-height: 40px;
+    line-height: 20px;
     padding-left: 18px;
-    letter-spacing: 1px;
+    /*letter-spacing: 1px;*/
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .li-2th:hover{
-	/*background: #4491e0 url("../assets/menu-left-icon.png") no-repeat;
-	background-position: 252px -2px;
-	background-size: 21px 45px;*/
-	background: #4491e0
+	background: url("../assets/menu-icon-down2.png") no-repeat;
+	background-position: 262px 3px;
+	background-color: #4491e0;
 }
 .li-2th-clicked{
-	/*background: #4491e0 url("../assets/menu-left-icon.png") no-repeat;
-	background-position: 252px -2px;
-	background-size: 21px 45px;*/
-	background: #4491e0
+	background: url("../assets/menu-icon-down2.png") no-repeat;
+	background-position: 262px 3px;
+	background-color: #4491e0;
 }
 .ul-2th{
 	display:none

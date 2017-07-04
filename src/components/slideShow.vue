@@ -156,7 +156,8 @@ export default {
   flex-flow: row;
 }
 .li-hpa{
-
+  color: #ccc;
+  padding-left: 20px;
 }
 .super-left{
   min-width: 866px;	
@@ -174,22 +175,27 @@ export default {
 }
 .middle{
     width: 55px;
-    height: 630px;
+    min-height: 681px;
     position: absolute;
-    top: 10px;
-    right: 1px;
+    top: 20px;
+    right: 10px;
+    height: 100%;
 }
 .middle-form {
 	width: 8px;
 	border: 2px solid rgb(212,216,223);
-	height: 630px;
+	height: 732px;
 	float: left;
 	background: rgb(226,230,237);
+	height: 90%;
 }
 .middle-li-1th{
-  margin-top: 22px;                   
-  position:relative;
+  margin-top: 26px;
+  position: relative;
   cursor: pointer;
+  font-size: 16px;
+  color: #ccc;
+  padding-left: 20px;
 }
 .middle-li-1th:after{
 	content:"";
@@ -203,9 +209,10 @@ export default {
 	top: 5px;
 }
 .middle-li-1th-2{
-	margin-top: 22px;                   
+	margin-top: 26px;                   
 	position:relative;
 	cursor: pointer;
+	padding-left: 20px;
 }
 .middle-li-1th-2:after{
 	content: "";
