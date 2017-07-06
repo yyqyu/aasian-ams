@@ -1,7 +1,7 @@
 <!-- 轮播图组件 -->
 <template>
-<div class="lunbo">
-	<div class="super-left" v-bind:style="{ height:clientHeights}">
+<div class="lunbo" v-bind:style="{ height:clientHeights}">
+	<div class="super-left" >
 			<div class="left">
 			    <div class="slide-data">{{slides[nowIndex].title}}</div>
 				<div class="slide-show" >
@@ -31,7 +31,6 @@
 				</ul>
 			</div>
 	</div>
-
 	<div class="right">
 	     <div class="right-1th">TIME(UTC)</div>
 		 <ul class="right-2th">
@@ -45,14 +44,12 @@
 		 		<a class="right-a" :href="item.src" target="_blank"></a>
 		 	</li>
 		 </ul>
-		 <div class="right-4th">
-		 	<ul>
+		 	<ul class="right-3th">
 		 		<li @click="goto(prevIndex)" class="right4th-li right4th-li1th fa fa-backward"></li>
 		 		<li v-on:click="runInv" class="right4th-li right4th-li2th fa fa-play"></li>
 		 		<li v-on:click="clearInv" class="right4th-li right4th-li3th fa fa-stop"></li>
 		 		<li @click="goto(nextIndex)" class="right4th-li right4th-li4th fa fa-forward"></li>
 		 	</ul>
-		 </div>
 	</div>
 </div>	
 </template>
@@ -79,7 +76,7 @@ export default {
 			nowIndexes:[],
 			nowIndex: 0,
 			isShow: true,
-			clientHeights: '680px'
+			clientHeights:null
 		}
 	},
 	methods: {
@@ -116,6 +113,20 @@ export default {
 		},
 		checkActive (index) {
 		   return	this.nowIndexes.indexOf(index) != -1 
+		},
+		gaodu (){
+			this.clientHeights = `${window.innerHeight-92}px`;
+			const that = this
+			window.onresize = function temp() {
+			    that.clientHeights = `${window.innerHeight-92}px`;
+			}
+		},
+		changelist (){
+			this.slides.forEach(function(item,index){
+				if(index%2==0){
+			         item.ouhang = 'rgb(247,248,250)'
+				}
+			})
 		}
 	},
 	computed : {  //计算属性，绑定轮播图左右翻页
@@ -134,25 +145,15 @@ export default {
 			 else {
 			 	   return this.nowIndex +1
 			 }
-		},
-
+		}      
 	},
 	mounted () { //组件渲染完毕执行该函数
 		//console.log(this.slides)
 		//this.runInv()
         //this.nowIndex.push(hpa);
         	
-        this.clientHeights = `${window.innerHeight-92}px`;
-        const that = this
-        window.onresize = function temp() {
-            that.clientHeights = `${window.innerHeight-92}px`;
-        }
-
-        this.slides.forEach(function(item,index){
-        	if(index%2==0){
-                 item.ouhang = 'rgb(247,248,250)'
-        	}
-        })
+        this.gaodu()
+        this.changelist()
 	}
 }
 </script>
@@ -185,9 +186,9 @@ export default {
     width: 55px;
     min-height: 758px;
     position: absolute;
-    top: 20px;
     right: 10px;
     height: 100%;
+    top:3%;
 }
 .middle-form {
 	width: 8px;
@@ -224,6 +225,7 @@ export default {
 	position:relative;
 	cursor: pointer;
 	padding-left: 20px;
+	width: 42px;
 }
 .middle-li-1th-2:after{
 	content: "";
@@ -339,9 +341,7 @@ export default {
    left: 225px;
 }
 .right-3th{
-  border-bottom: 3px solid rgb(238,238,238);
-  border-top: 3px solid rgb(238,238,238);
-  padding-bottom: 7px;
+  display: inline-block;
 }
 .right3th-left{
     float: left;

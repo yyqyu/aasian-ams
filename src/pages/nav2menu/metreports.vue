@@ -5,8 +5,8 @@
   	   	       <template v-for="check in checkList">  	   	          	   	       
   	   	              <div v-for="(item,index) in check.list">  	   	              
   	   	                  <span class="fa" 
-  	   	                       v-bind:class="[checkActive(item.id) ? 'ckbef' : 'ckaft']" 
-  	   	                       v-on:click="checklist(item.id)"
+  	   	                        v-bind:class="[checkActive(item.id) ? 'ckbef' : 'ckaft']" 
+  	   	                        v-on:click="checklist(item.id)"
   	   	                  >	   	                       
   	   	                      {{item.name}}
   	   	                  </span>	   	               
@@ -24,13 +24,10 @@
   	   				</span>
   	   			</li> -->
   	   			<li v-for="(item,index) in timeline" class="tline">
-  	   				<span class="timexianshi"
-                          v-bind:class="[shijianbiao(index)?'timexianshi2':'']"
-  	   				>
+  	   				<span v-bind:class="[shijianbiao(index)?'timexianshi2':'timexianshi']">
   	   				    {{item.time}}
-  	   				</span>
-  	   				
-  	   			</li>
+  	   				</span>  	   				
+  	   		  </li>
   	   			<span class="timexianshi3">
   	   					24h
   	   			</span>
@@ -200,7 +197,7 @@ export default{
   background-position-y: 0px;
 }
 .ckaft{
-   background:url('../../assets/ckafter.png') no-repeat;
+  background:url('../../assets/ckafter.png') no-repeat;
   background-position-x: 0px;
   background-position-y: 0px;
 }

@@ -1,33 +1,31 @@
 <template>
   <div class="main" v-bind:style="{ height:clientHeights}">
-	   <!-- <div class="gis-box" id="mapid"> -->
      <div class="gis-box" id="mapid">
         <div class="funBtn" v-on:click="kaiguan">
         </div>
         <div class="fun-panel" v-bind:class="{panelt:isPanelt}">
-              <template v-for="check in checkList">
-                  <div class="fun-title"><span>{{check.title}}</span></div>
-                  <table>
+              <template v-for="check in checkLists">
+                  <div class="fun-title" v-bind:style="{display:check.display}"><span>{{check.title}}</span></div>
+                  <table v-bind:class="[checkActive2(check.title)?'lasttable':'']">
                     <tr>
-                      <td v-for="(item,index) in check.list"                             
-                      >
-                        <label >
-                          <span class="btn-check">
-                              <span>
-                                 <i class="fa" 
-                                    v-bind:class="[checkActive(item.id) ? 'fa-square-o' : 'fa-check-square-o']"
-                                    v-on:click="checklist(item.id)"     
-                                 >
-                                 </i>
-                              </span>
-                              {{item.name}} 
-                          </span>
-                        </label>
+                      <td v-for="(item,index) in check.list">
+                              <span class="fa2" 
+                                    v-bind:class="[checkActive(item.id) ? 'ckbef' : 'ckaft']" 
+                                    v-on:click="checklist(item.id)"
+                              >                            
+                                  {{item.name}}
+                              </span>  
                       </td>
                     </tr>
                   </table>
               </template>
-        </div>	    
+        </div>	
+
+        <ul class="mapright">
+          <li class="giscaozuo1"></li>
+          <li class="giscaozuo2"></li>
+          <li class="giscaozuo3"></li>
+        </ul>   
 	   </div>
   </div> 	
 </template>
@@ -44,8 +42,8 @@ export default {
       KHlayer:null,
       map:null,
      	nowIndexes:[],
-     	checkList: {
-     		obs: {
+     	checkLists: [
+     		{
      			title:'Observation',
      			list: [
                   {
@@ -57,7 +55,7 @@ export default {
                   	id:'01'
                   },
                   {
-                  	name:'CR',
+                  	name:'Combined Reflectivity',
                     id:'02'
                   },
                   {
@@ -78,83 +76,78 @@ export default {
                   }
      			]
      		},
-     		hwd: {
-     			title:'Hazardous Weather Distinguish',
-     			list:[
-                  {
-                  	name:'Convective cloud',
-                  	id:'10'
-                  },
-                  {
-                  	name:'Turbulence',
-                  	id:'11'
-                  },
-                  {
-                  	name:'Sand-dust storm',
-                  	id:'12'
-                  },
-                  {
-                  	name:'Mountain wave',
-                  	id:'13'
-                  },
-                  {
-                  	name:'lcing',
-                  	id:'14'
-                  }
-     			]
-     		},
-     		ahwa:{
-     			title:'Asian Hazardous Weather Advisory',
-     			list:[
-                  {
-                  	name:'0-6h',
-                  	id:'20'
-                  },
-                  {
-                  	name:'6-12h',
-                  	id:'21'
-                  },
-                  {
-                  	name:'12-24h',
-                  	id:'22'
-                  }
-     			]
-     		},
-     		fourth:{
-     			title:'',
-     			list:[
-                  {
-                  	name:'Routes',
-                  	id:'30'
-                  },
-                  {
-                  	name:'FIRs',
-                  	id:'31'
-                  }
-     			]
-     		}
-     	},
-      checkList2: {
-        "obs":{
-            "title":"observation",
-            "list":[
-                  {"name":"ooppll","id":"00"},
-                  {"name":"llppss","id":"01"}
-            ]
-        },
-        "hwd":{
-            "title":"hazardous",
-            "list":[
-                  {"name":"nnmmbb","id":"10"},
-                  {"name":"sdada","id":"11"}
-            ]
-        }
-      }
+       	{
+       			title:'Hazardous Weather Distinguish',
+       			list:[
+                    {
+                    	name:'Convective cloud',
+                    	id:'10'
+                    },
+                    {
+                    	name:'Turbulence',
+                    	id:'11'
+                    },
+                    {
+                    	name:'Sand-dust storm',
+                    	id:'12'
+                    },
+                    {
+                    	name:'Mountain wave',
+                    	id:'13'
+                    },
+                    {
+                    	name:'lcing',
+                    	id:'14'
+                    }
+       			]
+       		},
+         	{
+         			title:'Asian Hazardous Weather Advisory',
+         			list:[
+                      {
+                      	name:'0-6h',
+                      	id:'20'
+                      },
+                      {
+                      	name:'6-12h',
+                      	id:'21'
+                      },
+                      {
+                      	name:'12-24h',
+                      	id:'22'
+                      }
+         			]
+         	},
+       		{
+       			title:'kong',
+       			list:[
+                    {
+                    	name:'Routes',
+                    	id:'30'
+                    },
+                    {
+                    	name:'FIRs',
+                    	id:'31'
+                    }
+       			]
+       		}
+     	]
      }
   },
   methods: {
     kaiguan: function() {
         this.isPanelt = !this.isPanelt
+
+        for(let i=0;i<this.checkLists.length;i++){
+          if(this.checkLists[i].title == 'kong'){
+                 this.checkLists[i].display = 'none'
+          }
+       }
+    },
+    checkActive2:function(index){
+         if(index == 'kong'){
+                 return true
+          }
     },
     checklist: function(index) {
     	if(this.nowIndexes.indexOf(index) === -1 ){
@@ -171,7 +164,6 @@ export default {
             this.map.addLayer(this.KHlayer);        
   		}
   		else {    
-         //alert(KHlayer)
          this.KHlayer.setVisible(false);
 
   			this.nowIndexes = _.remove(this.nowIndexes,(idx)=>{
@@ -229,6 +221,67 @@ export default {
     box-shadow: 0px 2px 2px black;
     margin:7px;
 }
+.mapright{
+   display: block;
+   position: absolute;
+   right:33px;
+   top:590px;
+   z-index:100;
+}
+.giscaozuo1{
+   width: 24px;
+   height: 24px;
+  background:url('../assets/gisicon1.png') no-repeat;
+  background-position-x: 0px;
+  background-position-y: 0px;
+  cursor: pointer;
+  padding-top: 3px;
+}
+.giscaozuo2{
+   width: 24px;
+   height: 24px;
+  background:url('../assets/gisicon2.png') no-repeat;
+  background-position-x: 0px;
+  background-position-y: 0px;
+  cursor: pointer;
+  padding-top: 3px;
+}
+.giscaozuo3{
+   width: 24px;
+   height: 24px;
+  background:url('../assets/gisicon3.png') no-repeat;
+  background-position-x: 0px;
+  background-position-y: 0px;
+  cursor: pointer;
+}
+.lasttable{
+   border-top: 2px solid rgb(228,229,241);
+    border-bottom: 2px solid rgb(228,229,241);
+    padding-bottom: 10px;
+    margin-left: -15px;
+    padding-left: 15px;
+    width: 340px !important;
+}
+.fa2 {
+    display: inline-block;  
+    height: 16px;
+    padding-left: 22px;
+    line-height: 14px;
+    color: #317abe !important;
+    float: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+.ckbef{
+  background:url('../assets/ckbefore.png') no-repeat;
+  background-position-x: 0px;
+  background-position-y: 0px;
+}
+.ckaft{
+  background:url('../assets/ckafter.png') no-repeat;
+  background-position-x: 0px;
+  background-position-y: 0px;
+}
 .gis-box{
     width:100%;
     height:100%;
@@ -239,17 +292,17 @@ export default {
     height:36px;
     background:url('/static/img/gisBtn.png') no-repeat center;
     position:absolute;
-    right:20px;
+    right:33px;
     top:20px;
     z-index:100;
     cursor:pointer;
 }
 .fun-panel{
-    width:340px;
-    height:506px;
+    width:325px;
+    height:491px;
     font-size:14px;
     position:absolute;
-    right:10px;
+    right:20px;
     top:10px;
     background-color:rgba(255,255,255,.85);
     -webkit-border-radius: 6px;
@@ -259,56 +312,55 @@ export default {
     -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .35);
     -moz-box-shadow: 0 0 20px rgba(0, 0, 0, .35);
     box-shadow: 0 0 20px rgba(0, 0, 0, .35);
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -ms-transition: all .3s;
-    -o-transition: all .3s;
-    transition: all .3s;
-    padding:15px;
+    padding-left: 15px;
+    padding-top: 10px;
     visibility: hidden;
     opacity: 0;
 }
 .panelt{
     visibility: visible;
     opacity: 1;
-    z-index: 99;
+    z-index: 99;    
+    background-image:url('../assets/nav1list.png');
+    background-repeat: no-repeat;
+    background-position-x: 0px;
+    background-position-y: 407px;
 }
-
-.main .gis-box .fun-panel .fun-title{
+.fun-panel .fun-title{
     width:100%;
     height:28px;
     line-height:28px;
     color:#333333;
     font-weight:bold;
 }
-.main .gis-box .fun-panel .fun-title span{
+.fun-panel .fun-title span{
     display:inline-block;
     height:100%;
     border-bottom:2px solid #317abe;
+    font-size: 14px;
 }
-.main .gis-box .fun-panel table{
+.fun-panel table{
     margin-top:6px;
-    border-spacing:4px;
     width:100%;
-    border:none;
 }
-.main .gis-box .fun-panel table td{
+.fun-panel table td{
 	float: left;
     width:50%;
     color:#1f649b;
+    padding-top: 10px;
 }
-.main .gis-box .fun-panel table td .btn-check{
+.fun-panel table td .btn-check{
     cursor:pointer;
 }
-.main .gis-box .fun-panel table td .btn-check span{
+.fun-panel table td .btn-check span{
     display:inline-block;
     width:20px;
 }
-.main .gis-box .fun-panel table td .btn-check i{
+.fun-panel table td .btn-check i{
     margin-right:8px;
     font-size:23px;
 }
-.main .gis-box .fun-panel .classify{
+.fun-panel .classify{
     border-top:2px solid #dddddd;
     margin-top:8px;
 }
