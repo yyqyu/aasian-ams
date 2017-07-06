@@ -16,7 +16,7 @@
 					 	  </a>
 					 </div>
 			    </div>  
-			</div>
+			</div>   
 			<div class="middle">
 			    <div class="middle-form">
 			    </div>
@@ -36,9 +36,10 @@
 	     <div class="right-1th">TIME(UTC)</div>
 		 <ul class="right-2th">
 		 	<li v-for="(item,index) in slides" 
-		 	class="right-li" 
-		 	@click="goto(index)"
-		 	:class="{on:index === nowIndex}" 
+			 	class="right-li" 
+			 	v-bind:style="{'background-color':item.ouhang}"
+			 	@click="goto(index)"
+			 	:class="{on:index === nowIndex}" 
 		 	>
 		 		{{item.title}}
 		 		<a class="right-a" :href="item.src" target="_blank"></a>
@@ -146,6 +147,12 @@ export default {
         window.onresize = function temp() {
             that.clientHeights = `${window.innerHeight-92}px`;
         }
+
+        this.slides.forEach(function(item,index){
+        	if(index%2==0){
+                 item.ouhang = 'rgb(247,248,250)'
+        	}
+        })
 	}
 }
 </script>
@@ -154,6 +161,7 @@ export default {
 .lunbo{
   display: flex;
   flex-flow: row;
+  
 }
 .li-hpa{
   color: #ccc;
@@ -167,7 +175,7 @@ export default {
   margin-top: 9px;
   position: relative;
   background-color: white;
-  min-height: 655px;
+  min-height: 725px;
 }
 .left{
 	min-width: 780px;
@@ -175,7 +183,7 @@ export default {
 }
 .middle{
     width: 55px;
-    min-height: 681px;
+    min-height: 758px;
     position: absolute;
     top: 20px;
     right: 10px;
@@ -191,11 +199,14 @@ export default {
 }
 .middle-li-1th{
   margin-top: 26px;
+  -webkit-margin-top: 19px;
+  -moz-margin-top:22px;
   position: relative;
   cursor: pointer;
   font-size: 16px;
   color: #ccc;
   padding-left: 20px;
+  width: 42px;
 }
 .middle-li-1th:after{
 	content:"";
@@ -228,12 +239,13 @@ export default {
 	background-position: -2px 0px;
 }
 .slide-data{
-    color: #3a3b3d;
+    color: #3366cc;
     bottom: 0;
     height: 25px;
     padding-top: 7px;
-    text-align: left;
-    padding-left: 308px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }
 .slide-data2{
 	width: 25px;
@@ -280,25 +292,31 @@ export default {
   padding: 0 10px;
   cursor: pointer;
   color: #363636;
+  font-size: 14px;
 }
 .on {
- background: #4fc08d;
+ background: #4fc08d !important;
+}
+.ouhang {
+	background-color: rgb(247,248,250);
 }	
 .right{
-    width: 219px;
-    min-width: 219px;
+    width: 260px;
+    min-width: 260px;
     border: 8px solid rgb(238,238,238);
     border-radius: 16px;
     margin-top: 9px;
     margin-left: 20px;
     background-color: white;
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 .right-1th{
 	height: 25px;
 	line-height: 25px;
 	text-align: center;
 	border-bottom: 5px solid rgb(238,238,238);
+	color: #336666;
+	font-size: 14px;
 }
 .right-2th{
 	height: calc(100% - 100px);
@@ -306,17 +324,19 @@ export default {
 }
 .right-li{
     position: relative;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 58px;
     cursor: pointer;
+    font-size: 12px;
+    letter-spacing: 1px;
 }
 .right-a{
    background: url("../assets/fangda.png") no-repeat;
    position: absolute;
    width: 17px;
    height: 17px;
-   left: 187px;
+   left: 225px;
 }
 .right-3th{
   border-bottom: 3px solid rgb(238,238,238);
@@ -350,7 +370,7 @@ export default {
 	border: 1px solid rgb(216,216,216);
 	width: 29px;
 	height: 25px;
-	margin-left: 22px;
+	margin-left: 27px;
 	margin-top: 13px;
 	cursor: pointer;
 	text-align: center;

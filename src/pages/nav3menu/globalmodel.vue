@@ -10,7 +10,7 @@
   	 	</li>
   	 </ul>
   </div>
-  <div class="bottom" v-bind:style="{ height:clientHeights}">
+  <div class="bottom" v-bind:style="{ height:clientHeights31}">
   	  
   </div>	
 </div>	
@@ -22,7 +22,7 @@ export default{
   data () {
   	return {
   		nowIndexes:[],
-      clientHeights:null,
+      clientHeights31:null,
   		navlist:[
           {"title":"Wind&Geopotential Height&Temperature"},
           {"title":"Cumulative Precipitation"},
@@ -55,10 +55,10 @@ export default{
   //    })
   // }  
   mounted () {
-            this.clientHeights = `${window.innerHeight-163}px`;
+            this.clientHeights31 = `${window.innerHeight-136}px`;
             const that = this
             window.onresize = function temp() {
-                that.clientHeights = `${window.innerHeight-163}px`;
+                that.clientHeights31 = `${window.innerHeight-136}px`;
             }
   }
 }

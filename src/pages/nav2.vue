@@ -192,7 +192,7 @@ export default {
 }	
 .nav2-right{
     width: auto;
-    margin-left: 230px;
+    margin-left: 270px;
     /*height: 698px;*/
     background-color: rgb(66,67,70);
 }

@@ -1,6 +1,7 @@
 <template>
-  <div class="main">
-	   <div class="gis-box" id="mapid">
+  <div class="main" v-bind:style="{ height:clientHeights}">
+	   <!-- <div class="gis-box" id="mapid"> -->
+     <div class="gis-box" id="mapid">
         <div class="funBtn" v-on:click="kaiguan">
         </div>
         <div class="fun-panel" v-bind:class="{panelt:isPanelt}">
@@ -28,7 +29,6 @@
               </template>
         </div>	    
 	   </div>
-
   </div> 	
 </template>
 
@@ -39,6 +39,7 @@ import ol from 'openlayers'
 export default {
   data () {
      return {
+      clientHeights:null,
      	isPanelt:false,
       KHlayer:null,
       map:null,
@@ -167,8 +168,7 @@ export default {
                    }),
                    zIndex:0
             });    
-            this.map.addLayer(this.KHlayer);
-            
+            this.map.addLayer(this.KHlayer);        
   		}
   		else {    
          //alert(KHlayer)
@@ -181,9 +181,15 @@ export default {
     },  
     checkActive (index) {
   		return this.nowIndexes.indexOf(index) == -1
-  	}
-  },
-  mounted () {
+  	},
+     gaodu: function(){
+           this.clientHeights = `${window.innerHeight-122}px`;
+           const that = this
+           window.onresize = function temp() {
+               that.clientHeights = `${window.innerHeight-122}px`;
+           }
+      },
+    chuangjianditu:function(){
       this.map = new ol.Map({
           control:[],
           layers: [
@@ -202,6 +208,11 @@ export default {
               zoom: 4
           })
       })
+    }
+  },
+  mounted () {
+      this.gaodu()
+      this.chuangjianditu()
   }
 }
 </script>
@@ -210,13 +221,13 @@ export default {
 .main{
     min-height: 570px;
     height: 100%;
-    padding:10px;
     background:#f0f2f5;
     border-left: 8px solid #4d4d4d;
     border-right: 8px solid #4d4d4d;
     border-bottom:8px solid #4d4d4d;
     border-top: 8px solid #4d4d4d;
     box-shadow: 0px 2px 2px black;
+    margin:7px;
 }
 .gis-box{
     width:100%;

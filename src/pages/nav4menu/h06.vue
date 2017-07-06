@@ -24,17 +24,45 @@
   	 	  	 	  	 <th class="th-1th">Original</th>
   	 	  	 	  	 <th class="th-1th">Sigment</th>
   	 	  	 	  </tr>
-  	 	  	 	  <tr v-for="tds in baowen" class="tr-1th">
+  	 	  	 	<!--   <tr v-for="tds in baowen" class="tr-1th">
   	 	  	 	  	 <td class="td-1th">DTG:{{tds.DTG}}<br/>SAC:{{tds.SAC}} <br/> VALID:{{tds.VALID}}
   	 	  	 	  	 </td>
   	 	  	 	  	 <td class="td-1th">
-  	 	  	 	  	         {{tds.SIGMENT}}
-  	 	  	 	  	         <br/>
-  	 	  	 	  	         <span class="td-span" 
-                                   v-on:click="graphics"
-  	 	  	 	  	         >
-  	 	  	 	  	         	Graphics
-  	 	  	 	  	         </span>
+	  	 	  	         {{tds.SIGMENT}}
+	  	 	  	         <br/>
+	  	 	  	         <span class="td-span" v-on:click="graphics">
+	  	 	  	         	Graphics
+	  	 	  	         </span>
+  	 	  	 	  	 </td>
+  	 	  	 	  </tr> -->
+
+  	 	  	 	  <!-- 设计图用 -->
+  	 	  	 	    <tr v-for="tds in baowen" class="tr-1th">
+  	 	  	 	  	 <td class="td-1th">
+	  	 	  	 	  	 DTG:20170309/1200Z<br/>
+	  	 	  	 	  	 SAC:BEIJING <br/> 
+	  	 	  	 	  	 VALID:1500000/210000<br/>
+	  	 	  	 	  	 <span style="color:black;background-color:rgb(131,192,255)">&nbspPHENOMENON:MOD TURB</span><br/>
+	  	 	  	 	  	 1 Aircraft Report<br/>
+	  	 	  	 	  	 PART:1/5<br>
+	  	 	  	 	  	 <span style="color:black;background-color:rgb(150,241,255)">LOCATION:WI N3000 E08500 - N2700 E08800 - N2700 E08900- N3000</span><br>
+	  	 	  	 	  	 <span style="color:black;background-color:rgb(150,241,255)">E1200- N2700 E1300-N2700 E08500</span><br>
+	  	 	  	 	  	 <span style="color:black;background-color:rgb(164,224,254)">LEVEL:FL270/350</span><br>
+	  	 	  	 	  	 <span style="color:black;background-color:rgb(172,183,195)">MOVEMENT:STNR</span><br>
+	  	 	  	 	  	 INTENSITY:NC<br>
+	  	 	  	 	  	 RANGE:NARROW<br>
+	  	 	  	 	  	 RMK:NIL<br>
+	  	 	  	 	  	 NXT ADVISORY:20170309/1800Z= 
+  	 	  	 	  	 </td>
+  	 	  	 	  	 <td class="td-1th">
+	  	 	  	         ZBPE SIGMENT 1 VALID 091500/092100 ZBAA-<br/>
+	  	 	  	         ZBPE BEIJING FIR <span style="color:black;background-color:rgb(131,192,255)">MOD TURB </span>&nbsp FCST<br>
+                         <span style="color:black;background-color:rgb(150,241,255)">WI N3000 E08500 - N2700 E08800 - N2700 E08900- N3000 E12000-</span><br>
+                         <span style="color:black;background-color:rgb(150,241,255)">N2700 E13000- N2700 E08500</span><br>
+                         <span style="color:black;background-color:rgb(164,224,254)">FL270/350</span><span style="color:black;background-color:rgb(172,183,195)">STNR</span><br>
+	  	 	  	         <span class="td-span" v-on:click="graphics">
+	  	 	  	         	Graphics
+	  	 	  	         </span>
   	 	  	 	  	 </td>
   	 	  	 	  </tr>
   	 	  	 </table>
@@ -68,7 +96,7 @@ export default{
 			],
 			baowen:[
               {
-              	"DTG":"20170309/1200z",
+              	"DTG":"20170309/1200Z",
               	"SAC":"BEIJING",
               	"VALID":"1500000/210000",
               	"SIGMENT":"ZBPE SIGMENT 1 VALID ",
@@ -78,7 +106,7 @@ export default{
               	"DTG":"20160505/1222z",
               	"SAC":"BEIJING",
               	"VALID":"8888888",
-              	"SIGMENT":"ZBPE SIGMENT 1 VALID ",
+              	"SIGMENT":"ZBPE SIGMENT 1 VALID ",    
               	"id":"02"
               }  
 			]
@@ -131,10 +159,10 @@ export default{
         // this.nowIndexes.push(0)
         // this.checkActive(0)
 
-	        this.clientHeights = `${window.innerHeight-159}px`;
+	        this.clientHeights = `${window.innerHeight-151}px`;
 	        const that = this
 	        window.onresize = function temp() {
-	            that.clientHeights = `${window.innerHeight-159}px`;
+	            that.clientHeights = `${window.innerHeight-151}px`;
 	        }
 	}
 }	
@@ -168,7 +196,8 @@ export default{
 }
 .baowen{
   width: 900px;
-  height: 625px;
+  min-height: 625px;
+  height: 96%;
   top: -7px;
   border:7px rgb(238,238,238) solid;
   position: absolute;
@@ -186,6 +215,8 @@ export default{
 	height: 550px;
 	background-color: rgb(235,236,240);
 	padding-left: 15px;
+	border-left: 1px solid rgb(205,206,209);
+	border-right: 1px solid rgb(205,206,209);
 }
 .th-1th{
 	text-align: left;
@@ -195,11 +226,13 @@ export default{
 	height: 50px;
 	line-height: 50px;
 	border-bottom: 1px solid rgb(208,208,208);
+	letter-spacing: 1px;
 }
 .td-1th{
 	min-height: 200px;
 	border-bottom: 1px solid rgb(208,208,208);
 	padding-top: 12px;
+	font-size: 12px;
 }
 .ul-1th{
 	overflow: hidden;
@@ -256,7 +289,9 @@ export default{
 	line-height: 27px;
 	font-size: 14px;
 	cursor: pointer;
-	box-shadow:0 0 10px 2px rgb(68,145,224);  
+	box-shadow:0 0 10px 2px rgb(68,145,224);
+	letter-spacing: 2px;
+	font-weight: bold;  
 }
 .tr-1th{
  

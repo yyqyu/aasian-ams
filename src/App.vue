@@ -121,7 +121,6 @@ export default {
        eventBus.$emit('reset-component')
      }
   }
-
 }
 
 </script>
@@ -230,9 +229,8 @@ margin:0 auto;
   padding-top: 18px;
   padding-left: 35px;
   line-height: 11px;
-  /*opacity: 0.65;*/
   word-wrap: break-word;
-  max-width: 228px;
+  max-width: 235px;
   cursor: pointer;
   font-weight: bold;
 }
